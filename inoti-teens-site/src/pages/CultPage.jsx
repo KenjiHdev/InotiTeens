@@ -3,50 +3,9 @@ import { cultoData } from "../data/cultoData.js";
 import { HeartCrossIcon, CrownOfThornsDivider } from "../components/Icons.jsx";
 import { SpotifySection } from "../components/SpotifySection.jsx";
 
-function calculateTimeLeft(targetIso) {
-  const target = new Date(targetIso).getTime();
-  const now = Date.now();
-  const diff = Math.max(0, target - now);
-
-  const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const horas = Math.floor((diff / (1000 * 60 * 60)) % 24);
-  const minutos = Math.floor((diff / 1000 / 60) % 60);
-  const segundos = Math.floor((diff / 1000) % 60);
-
-  return {
-    dias: String(dias).padStart(2, "0"),
-    horas: String(horas).padStart(2, "0"),
-    minutos: String(minutos).padStart(2, "0"),
-    segundos: String(segundos).padStart(2, "0"),
-  };
-}
-
-function formatPhone(value) {
-  const digits = value.replace(/\D/g, "").slice(0, 11);
-  if (digits.length <= 2) return digits;
-  if (digits.length <= 7) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
-  return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
-}
-
 export function CultPage() {
-  const [timeLeft, setTimeLeft] = useState(() =>
-    calculateTimeLeft(cultoData.culto.dataISO)
-  );
   const [beamPos, setBeamPos] = useState({ x: 50, y: 0 });
   const [parallaxY, setParallaxY] = useState(0);
-
-  // Estado do formulário de confirmação
-  const [nome, setNome] = useState("");
-  const [whatsapp, setWhatsapp] = useState("");
-  const [perfil, setPerfil] = useState("Sou do INOTI Teens");
-  const [confirmado, setConfirmado] = useState(false);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft(cultoData.culto.dataISO));
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
 
   useEffect(() => {
     const onScroll = () => {
@@ -63,17 +22,6 @@ export function CultPage() {
     const y = Math.round(((e.clientY - rect.top) / rect.height) * 50);
     setBeamPos({ x, y });
   };
-
-  const handleSubmitRsvp = (e) => {
-    e.preventDefault();
-    if (!nome.trim()) return;
-    setConfirmado(true);
-  };
-
-  const shareMessage = encodeURIComponent(
-    `Ei! No sábado (07/11 às 19h) vai rolar o culto do INOTI Teens com o tema "${cultoData.culto.tema}" (Salmo 31.15) na ${cultoData.culto.igreja || "Igreja Evangélica Caminho da Vida"} (${cultoData.culto.endereco}). Bora comigo? 🙌\n\nOuça a playlist dos louvores aqui: ${cultoData.culto.spotifyPlaylistUrl}`
-  );
-  const whatsappShareUrl = `https://wa.me/?text=${shareMessage}`;
 
   return (
     <main>
@@ -105,7 +53,6 @@ export function CultPage() {
               <span className="chip chip-dark">Entrada Franca</span>
             </div>
 
-            {/* Truque de marca: alternar cores dentro do mesmo título */}
             <h1 className="display-title hero-title">
               <span className="word-reveal t-light">AO </span>
               <span className="word-reveal t-gold">DONO </span>
@@ -143,12 +90,11 @@ export function CultPage() {
             </div>
 
             <div className="hero-actions">
-              <a href="#confirmar" className="btn btn-primary">
-                <HeartCrossIcon size={18} color="#FAF7F2" />
-                Confirmar presença
-              </a>
-              <a href="#louvores" className="btn btn-secondary-light">
+              <a href="#louvores" className="btn btn-primary">
                 🎧 Ouvir Playlist no Spotify
+              </a>
+              <a href="#como-chegar" className="btn btn-secondary-light">
+                📍 Como Chegar
               </a>
             </div>
           </div>
@@ -214,84 +160,37 @@ export function CultPage() {
         </div>
       </section>
 
-      {/* 3. CONTAGEM REGRESSIVA ATÉ O CULTO */}
-      <section className="countdown-section" aria-label="Contagem regressiva para o culto">
-        <div className="container countdown-wrap">
-          <div>
-            <span className="chip chip-dark">Contagem Regressiva · 07/11 às 19h</span>
-            <h2
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: "clamp(1.7rem, 3.5vw, 2.4rem)",
-                marginTop: "0.65rem",
-              }}
-            >
-              Falta pouco para estarmos juntos
-            </h2>
-          </div>
-
-          <div className="countdown-grid">
-            <div className="countdown-item">
-              <span className="countdown-number">{timeLeft.dias}</span>
-              <span className="countdown-label">Dias</span>
-            </div>
-            <div className="countdown-item">
-              <span className="countdown-number">{timeLeft.horas}</span>
-              <span className="countdown-label">Horas</span>
-            </div>
-            <div className="countdown-item">
-              <span className="countdown-number">{timeLeft.minutos}</span>
-              <span className="countdown-label">Minutos</span>
-            </div>
-            <div className="countdown-item">
-              <span className="countdown-number">{timeLeft.segundos}</span>
-              <span className="countdown-label">Segundos</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. INTEGRAÇÃO COM SPOTIFY (PLAYLIST DOS LOUVORES) */}
+      {/* INTEGRAÇÃO COM SPOTIFY (PLAYLIST DOS LOUVORES) */}
       <SpotifySection />
 
-      {/* 5. PROGRAMAÇÃO DO CULTO (TIMELINE VERTICAL) */}
-      <section className="timeline-section">
+      {/* MINISTRAÇÃO DA PALAVRA — PASTOR JOEL HAYASHI */}
+      <section className="preacher-section">
         <div className="container">
-          <div className="section-header">
-            <span className="chip">Programação da Noite</span>
-            <h2 className="section-title">
-              Cada momento preparado com <span className="gold">propósito</span>
-            </h2>
-            <p className="section-subtitle">
-              Sábado, {cultoData.culto.dataTexto} a partir das 18h45 · Ministração com{" "}
-              <strong>{cultoData.culto.preletor}</strong>.
-            </p>
-          </div>
-
-          <div className="timeline">
-            {cultoData.programacao.map((item) => (
-              <div key={item.horario} className="timeline-item">
-                <div className="timeline-node" aria-hidden="true">
-                  <HeartCrossIcon size={16} color="#E0272D" />
-                </div>
-                <div className="timeline-card">
-                  <div className="timeline-meta">
-                    <span className="timeline-time">{item.horario}</span>
-                    <span className="chip">{item.tag}</span>
-                  </div>
-                  <h3 className="timeline-title">{item.titulo}</h3>
-                  <p style={{ color: "var(--sepia)", fontSize: "0.95rem" }}>
-                    {item.descricao}
-                  </p>
-                </div>
-              </div>
-            ))}
+          <div className="preacher-card">
+            <div className="preacher-badge-avatar" aria-hidden="true">
+              JH
+            </div>
+            <div className="preacher-content">
+              <span className="chip">{cultoData.culto.preletorCargo}</span>
+              <h3>{cultoData.culto.preletor}</h3>
+              <p>{cultoData.culto.preletorBio}</p>
+            </div>
+            <div>
+              <a
+                href={cultoData.culto.preletorInstagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary"
+              >
+                Instagram {cultoData.culto.preletorInstagramHandle} ↗
+              </a>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 6 & 7. SOBRE O INOTI TEENS + COMO CHEGAR */}
-      <section className="about-location-section">
+      {/* SOBRE O INOTI TEENS + COMO CHEGAR */}
+      <section id="como-chegar" className="about-location-section">
         <div className="container about-location-grid">
           {/* Sobre o culto e INOTI Teens */}
           <div className="card card-paper" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
@@ -386,222 +285,44 @@ export function CultPage() {
         </div>
       </section>
 
-      {/* 8. CONFIRMAÇÃO DE PRESENÇA & COMPARTILHAR NO WHATSAPP */}
-      <section id="confirmar" className="rsvp-section">
-        <div className="container rsvp-grid">
-          <div className="rsvp-form-card">
-            <span className="chip">Presença Gratuita</span>
-            <h2 className="section-title" style={{ marginTop: "0.65rem" }}>
-              Quero estar <span className="gold">lá!</span>
-            </h2>
-            <p style={{ color: "var(--sepia)", marginBottom: "1.5rem" }}>
-              Confirme sua presença em menos de 30 segundos para prepararmos a
-              melhor recepção para você.
-            </p>
-
-            {confirmado ? (
-              <div className="rsvp-success" role="status">
-                <div style={{ marginBottom: "0.65rem" }}>
-                  <HeartCrossIcon size={34} color="#E0272D" />
-                </div>
-                <h3
-                  style={{
-                    fontFamily: "var(--font-display)",
-                    fontSize: "1.65rem",
-                    marginBottom: "0.4rem",
-                  }}
-                >
-                  Tá confirmado, {nome}! Te esperamos 🙌
-                </h3>
-                <p style={{ color: "var(--sepia)", marginBottom: "1.25rem" }}>
-                  Anote na agenda: <strong>Sábado, 07/11 às 19h</strong> na{" "}
-                  <strong>{cultoData.culto.endereco}</strong>. Aproveite para
-                  chamar um amigo no WhatsApp!
-                </p>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", justifyContent: "center" }}>
-                  <a
-                    href={whatsappShareUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-primary"
-                  >
-                    Chama um amigo no WhatsApp 💬
-                  </a>
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => {
-                      setNome("");
-                      setWhatsapp("");
-                      setConfirmado(false);
-                    }}
-                  >
-                    Confirmar outra pessoa
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmitRsvp}>
-                <div className="form-group">
-                  <label className="form-label" htmlFor="rsvp-nome">
-                    Seu nome *
-                  </label>
-                  <input
-                    id="rsvp-nome"
-                    type="text"
-                    className="form-input"
-                    placeholder="Ex.: Lucas Oliveira"
-                    required
-                    value={nome}
-                    onChange={(e) => setNome(e.target.value)}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label" htmlFor="rsvp-whats">
-                    Seu WhatsApp (opcional)
-                  </label>
-                  <input
-                    id="rsvp-whats"
-                    type="tel"
-                    className="form-input"
-                    placeholder="(11) 99999-9999"
-                    value={whatsapp}
-                    onChange={(e) => setWhatsapp(formatPhone(e.target.value))}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label" htmlFor="rsvp-perfil">
-                    Você já faz parte do INOTI Teens?
-                  </label>
-                  <select
-                    id="rsvp-perfil"
-                    className="form-input"
-                    value={perfil}
-                    onChange={(e) => setPerfil(e.target.value)}
-                  >
-                    <option value="Sou do INOTI Teens">Já sou do INOTI Teens</option>
-                    <option value="Sou visitante / convidado">É minha primeira vez / Sou convidado(a)</option>
-                    <option value="Vou levar amigos">Vou com amigos!</option>
-                  </select>
-                </div>
-
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  style={{ width: "100%", marginTop: "0.5rem" }}
-                >
-                  <HeartCrossIcon size={18} color="#FAF7F2" />
-                  Confirmar presença
-                </button>
-              </form>
-            )}
-          </div>
-
-          {/* Convite rápido para compartilhar */}
-          <div className="share-card">
-            <span
-              className="chip"
-              style={{
-                background: "rgba(250, 247, 242, 0.2)",
-                color: "#FAF7F2",
-                borderColor: "rgba(250, 247, 242, 0.4)",
-              }}
-            >
-              Convite Especial
-            </span>
-            <h3
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: "clamp(1.8rem, 3.5vw, 2.5rem)",
-                lineHeight: 1.12,
-                margin: "0.85rem 0",
-              }}
-            >
-              Quem você vai trazer com você?
-            </h3>
-            <p style={{ opacity: 0.95, marginBottom: "1.5rem" }}>
-              Um simples convite pode mudar a história de um amigo que precisa
-              ouvir que os dias dele estão nas mãos de Deus. Envie a mensagem já
-              pronta com o endereço e o link da nossa playlist!
-            </p>
-
-            <div
-              style={{
-                background: "rgba(18, 16, 18, 0.25)",
-                borderRadius: "16px",
-                padding: "1.1rem",
-                fontSize: "0.9rem",
-                marginBottom: "1.5rem",
-                border: "1px solid rgba(250, 247, 242, 0.25)",
-              }}
-            >
-              “Ei! No sábado (07/11 às 19h) vai rolar o culto do INOTI Teens com
-              o tema <strong>Ao Dono dos Meus Dias</strong> na Praça Haroldo
-              Daltro, 460. Bora comigo? 🙌”
-            </div>
-
-            <a
-              href={whatsappShareUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn"
-              style={{
-                background: "var(--papel)",
-                color: "var(--tinta)",
-                width: "100%",
-              }}
-            >
-              Chama um amigo no WhatsApp 📲
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* 9. FAQ RÁPIDO */}
-      <section className="faq-section">
+      {/* REDES SOCIAIS AO FINAL DO SITE */}
+      <section className="socials-section">
         <div className="container">
           <div className="section-header">
-            <span className="chip">Dúvidas Frequentes</span>
+            <span className="chip">Conecte-se Conosco</span>
             <h2 className="section-title">
-              Tudo o que você precisa <span className="gold">saber</span>
+              Nossas <span className="gold">Redes Sociais</span>
             </h2>
+            <p className="section-subtitle">
+              Siga os perfis oficiais do INOTI Teens, da Igreja Evangélica Caminho da Vida e da EBD para acompanhar tudo de perto.
+            </p>
           </div>
 
-          <div className="faq-grid">
-            {cultoData.faq.map((item) => (
-              <div key={item.pergunta} className="card card-paper">
-                <h3
-                  style={{
-                    fontFamily: "var(--font-ui)",
-                    fontWeight: 700,
-                    fontSize: "1.05rem",
-                    marginBottom: "0.4rem",
-                    color: "var(--tinta)",
-                  }}
-                >
-                  {item.pergunta}
-                </h3>
-                <p style={{ color: "var(--sepia)", fontSize: "0.94rem" }}>
-                  {item.resposta}
-                </p>
-              </div>
+          <div className="socials-grid">
+            {cultoData.redesSociais.map((rede) => (
+              <a
+                key={rede.nome}
+                href={rede.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-card"
+              >
+                <div>
+                  <div className="social-card-top">
+                    <span className="chip">{rede.destaque}</span>
+                  </div>
+                  <h3 className="social-title">{rede.nome}</h3>
+                  <span className="social-handle">{rede.handle}</span>
+                  <p className="social-desc">{rede.descricao}</p>
+                </div>
+                <span className="social-link-cta">
+                  Acessar página oficial ↗
+                </span>
+              </a>
             ))}
           </div>
         </div>
       </section>
-
-      {/* STICKY BAR MOBILE */}
-      <div className="mobile-sticky-bar">
-        <div className="mobile-sticky-info">
-          <strong>Culto 07/11 às 19h</strong>
-          <span>Praça Haroldo Daltro, 460</span>
-        </div>
-        <a href="#confirmar" className="btn btn-primary" style={{ padding: "0.65rem 1.2rem", fontSize: "0.86rem" }}>
-          Confirmar presença
-        </a>
-      </div>
     </main>
   );
 }

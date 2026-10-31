@@ -16,7 +16,7 @@ export function SpotifySection() {
               Prepare o coração com a <span>Playlist Oficial</span> da noite
             </h3>
             <p>
-              A adoração começa muito antes do sábado às 19h.Reunimos nesta playlist
+              A adoração começa muito antes do sábado às 19h. Reunimos nesta playlist
               todos os louvores que serão entoados no culto{" "}
               <strong>“{cultoData.culto.tema}”</strong> para você ouvir na semana,
               meditar nas letras e já chegar cantando junto com toda a juventude.
@@ -45,9 +45,6 @@ export function SpotifySection() {
                 className="btn btn-spotify"
               >
                 Ouvir Playlist no App Spotify ↗
-              </a>
-              <a href="#confirmar" className="btn btn-secondary-light">
-                Confirmar Presença
               </a>
             </div>
           </div>

@@ -1175,25 +1175,147 @@ textarea {
 }
 
 /* =========================================
-   SEÇÃO 9: FAQ & RODAPÉ
+   SEÇÃO: MINISTRAÇÃO (PASTOR JOEL HAYASHI)
    ========================================= */
-.faq-section {
+.preacher-section {
   padding: 4rem 0;
-  background: var(--papel);
+  background: var(--grad-papel-quente);
+  border-top: 1.5px solid var(--madeira);
+  border-bottom: 1.5px solid var(--madeira);
 }
 
-.faq-grid {
+.preacher-card {
+  background: var(--papel);
+  border: 1.5px solid var(--ouro);
+  border-radius: 26px;
+  padding: 2.5rem;
+  box-shadow: 0 16px 40px rgba(28, 26, 24, 0.06);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 2rem;
+  align-items: center;
+}
+
+.preacher-badge-avatar {
+  width: 84px;
+  height: 84px;
+  border-radius: 22px;
+  background: var(--noite);
+  border: 2px solid var(--ouro);
+  color: var(--brasa);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  flex-shrink: 0;
+  box-shadow: 0 10px 24px rgba(18, 16, 18, 0.18);
+}
+
+.preacher-content h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.65rem, 3vw, 2.25rem);
+  color: var(--tinta);
+  margin: 0.35rem 0 0.55rem;
+  line-height: 1.15;
+}
+
+.preacher-content p {
+  color: var(--sepia);
+  font-size: 1rem;
+  max-width: 680px;
+}
+
+/* =========================================
+   SEÇÃO FINAL: REDES SOCIAIS
+   ========================================= */
+.socials-section {
+  padding: 4.5rem 0;
+  background: var(--grad-papel-quente);
+  border-top: 1.5px solid var(--madeira);
+}
+
+.socials-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1.25rem;
-  max-width: 960px;
+  gap: 1.35rem;
+  max-width: 980px;
   margin: 0 auto;
+}
+
+.social-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--papel);
+  border: 1.5px solid var(--madeira);
+  border-radius: var(--radius-card);
+  padding: 1.75rem;
+  transition: transform 0.28s var(--ease), border-color 0.28s var(--ease), box-shadow 0.28s var(--ease);
+}
+
+.social-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--ouro);
+  box-shadow: 0 14px 32px rgba(28, 26, 24, 0.08);
+}
+
+.social-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.social-icon-box {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: rgba(166, 124, 78, 0.14);
+  color: var(--tinta);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--madeira);
+}
+
+.social-title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  color: var(--tinta);
+  margin-bottom: 0.2rem;
+}
+
+.social-handle {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--teens);
+  margin-bottom: 0.65rem;
+  display: block;
+}
+
+.social-desc {
+  color: var(--sepia);
+  font-size: 0.94rem;
+  margin-bottom: 1.25rem;
+}
+
+.social-link-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--coracao);
 }
 
 .footer {
   background: var(--sepia);
   color: var(--papel);
-  padding: 3.5rem 0 5.5rem;
+  padding: 3.5rem 0 4rem;
   border-top: 2px solid var(--ouro);
 }
 
@@ -1247,20 +1369,13 @@ textarea {
   .hero-grid,
   .spotify-card,
   .about-location-grid,
-  .rsvp-grid {
+  .preacher-card,
+  .socials-grid {
     grid-template-columns: 1fr;
   }
 
   .messages-grid {
     grid-template-columns: 1fr;
-  }
-
-  .faq-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .mobile-sticky-bar {
-    display: flex;
   }
 }
 

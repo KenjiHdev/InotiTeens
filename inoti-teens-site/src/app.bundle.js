@@ -8,6 +8,20 @@ const heartCrossSvg = (size = 18, color = "#E0272D") => `
   </svg>
 `;
 
+const instagramIconSvg = (size = 22, color = "currentColor") => `
+  <svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+  </svg>
+`;
+
+const facebookIconSvg = (size = 22, color = "currentColor") => `
+  <svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+  </svg>
+`;
+
 const crownOfThornsDividerHtml = () => `
   <div class="thorn-divider" role="separator" aria-hidden="true">
     <svg class="thorn-icon-spin" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -20,43 +34,7 @@ const crownOfThornsDividerHtml = () => `
 
 const state = {
   activeTab: "inicio",
-  rsvpConfirmed: false,
-  rsvpNome: "",
-  rsvpWhatsapp: "",
-  rsvpPerfil: "Sou do INOTI Teens",
 };
-
-function calculateTimeLeft(targetIso) {
-  const target = new Date(targetIso).getTime();
-  const now = Date.now();
-  const diff = Math.max(0, target - now);
-
-  const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const horas = Math.floor((diff / (1000 * 60 * 60)) % 24);
-  const minutos = Math.floor((diff / 1000 / 60) % 60);
-  const segundos = Math.floor((diff / 1000) % 60);
-
-  return {
-    dias: String(dias).padStart(2, "0"),
-    horas: String(horas).padStart(2, "0"),
-    minutos: String(minutos).padStart(2, "0"),
-    segundos: String(segundos).padStart(2, "0"),
-  };
-}
-
-function formatPhone(value) {
-  const digits = value.replace(/\D/g, "").slice(0, 11);
-  if (digits.length <= 2) return digits;
-  if (digits.length <= 7) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
-  return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
-}
-
-function getWhatsappShareUrl() {
-  const shareMessage = encodeURIComponent(
-    `Ei! No sábado (07/11 às 19h) vai rolar o culto do INOTI Teens com o tema "${cultoData.culto.tema}" (Salmo 31.15) na ${cultoData.grupo.igreja} (${cultoData.culto.endereco}). Bora comigo? 🙌\n\nOuça a playlist dos louvores aqui: ${cultoData.culto.spotifyPlaylistUrl}`
-  );
-  return `https://wa.me/?text=${shareMessage}`;
-}
 
 function renderNavbar() {
   const tabs = [
@@ -71,7 +49,7 @@ function renderNavbar() {
       <div class="container navbar-inner">
         <button type="button" class="brand-trigger" data-tab-target="inicio" aria-label="Ir para a página inicial do INOTI Teens">
           <div class="brand-logo-wrap">
-            <img src="/assets/logo-inoti-teens.png" alt="Logo INOTI Teens" class="brand-logo-img" />
+            <img src="./assets/logo-inoti-teens.png" alt="Logo INOTI Teens" class="brand-logo-img" />
           </div>
           <div>
             <div class="brand-title">INOTI <span>TEENS</span></div>
@@ -109,7 +87,7 @@ function renderUnderConstruction(sectionName) {
         <div class="uc-grid">
           <div>
             <div class="uc-logo-card">
-              <img src="/assets/logo-inoti-teens.png" alt="Logo INOTI Teens" />
+              <img src="./assets/logo-inoti-teens.png" alt="Logo INOTI Teens" />
               <div>
                 <div style="font-family: var(--font-ui); font-weight: 700; font-size: 1.2rem; color: var(--tinta);">
                   INOTI <span style="color: var(--teens);">TEENS</span>
@@ -169,7 +147,7 @@ function renderUnderConstruction(sectionName) {
             </p>
 
             <div class="uc-art-preview">
-              <img src="/assets/arte-culto.jpg" alt="Arte do culto Ao Dono dos Meus Dias" />
+              <img src="./assets/arte-culto.jpg" alt="Arte do culto Ao Dono dos Meus Dias" />
             </div>
 
             <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; font-size: 0.88rem; color: var(--madeira); margin-bottom: 1.2rem;">
@@ -189,12 +167,9 @@ function renderUnderConstruction(sectionName) {
 }
 
 function renderCultPage() {
-  const timeLeft = calculateTimeLeft(cultoData.culto.dataISO);
-  const whatsappShareUrl = getWhatsappShareUrl();
-
   return `
     <main>
-      <!-- 1. HERO -->
+      <!-- 1. HERO (Sem botão de Confirmar Presença) -->
       <section class="cult-hero" id="cult-hero-section">
         <div class="ember-container" aria-hidden="true">
           <span class="ember"></span>
@@ -247,24 +222,23 @@ function renderCultPage() {
             </div>
 
             <div class="hero-actions">
-              <a href="#confirmar" class="btn btn-primary" data-scroll-to="confirmar">
-                ${heartCrossSvg(18, "#FAF7F2")}
-                Confirmar presença
-              </a>
-              <a href="#louvores" class="btn btn-secondary-light" data-scroll-to="louvores">
+              <a href="#louvores" class="btn btn-primary" data-scroll-to="louvores">
                 🎧 Ouvir Playlist no Spotify
+              </a>
+              <a href="#como-chegar" class="btn btn-secondary-light" data-scroll-to="como-chegar">
+                📍 Como Chegar
               </a>
             </div>
           </div>
 
           <div class="hero-artwork-frame">
             <img
-              src="/assets/arte-culto.jpg"
+              src="./assets/arte-culto.jpg"
               alt="Arte oficial do culto Ao Dono dos Meus Dias — Salmo 31.15"
               class="hero-artwork-img"
             />
             <div class="hero-artwork-badge">
-              <img src="/assets/logo-inoti-teens.png" alt="Selo INOTI Teens" />
+              <img src="./assets/logo-inoti-teens.png" alt="Selo INOTI Teens" />
               <span>INOTI Teens · Caminho da Vida</span>
             </div>
           </div>
@@ -316,38 +290,7 @@ function renderCultPage() {
         </div>
       </section>
 
-      <!-- 3. CONTAGEM REGRESSIVA -->
-      <section class="countdown-section" aria-label="Contagem regressiva para o culto">
-        <div class="container countdown-wrap">
-          <div>
-            <span class="chip chip-dark">Contagem Regressiva · 07/11 às 19h</span>
-            <h2 style="font-family: var(--font-display); font-size: clamp(1.7rem, 3.5vw, 2.4rem); margin-top: 0.65rem;">
-              Falta pouco para estarmos juntos
-            </h2>
-          </div>
-
-          <div class="countdown-grid">
-            <div class="countdown-item">
-              <span class="countdown-number" id="cd-dias">${timeLeft.dias}</span>
-              <span class="countdown-label">Dias</span>
-            </div>
-            <div class="countdown-item">
-              <span class="countdown-number" id="cd-horas">${timeLeft.horas}</span>
-              <span class="countdown-label">Horas</span>
-            </div>
-            <div class="countdown-item">
-              <span class="countdown-number" id="cd-minutos">${timeLeft.minutos}</span>
-              <span class="countdown-label">Minutos</span>
-            </div>
-            <div class="countdown-item">
-              <span class="countdown-number" id="cd-segundos">${timeLeft.segundos}</span>
-              <span class="countdown-label">Segundos</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 4. INTEGRAÇÃO COM SPOTIFY -->
+      <!-- INTEGRAÇÃO COM SPOTIFY -->
       <section id="louvores" class="spotify-section">
         <div class="container">
           <div class="spotify-card">
@@ -390,9 +333,6 @@ function renderCultPage() {
                 >
                   Ouvir Playlist no App Spotify ↗
                 </a>
-                <a href="#confirmar" class="btn btn-secondary-light" data-scroll-to="confirmar">
-                  Confirmar Presença
-                </a>
               </div>
             </div>
 
@@ -412,46 +352,35 @@ function renderCultPage() {
         </div>
       </section>
 
-      <!-- 5. PROGRAMAÇÃO -->
-      <section class="timeline-section">
+      <!-- MINISTRAÇÃO DA PALAVRA — PASTOR JOEL HAYASHI + INSTAGRAM DELE -->
+      <section class="preacher-section">
         <div class="container">
-          <div class="section-header">
-            <span class="chip">Programação da Noite</span>
-            <h2 class="section-title">
-              Cada momento preparado com <span class="gold">propósito</span>
-            </h2>
-            <p class="section-subtitle">
-              Sábado, ${cultoData.culto.dataTexto} a partir das 18h45 · Ministração com
-              <strong> ${cultoData.culto.preletor}</strong>.
-            </p>
-          </div>
-
-          <div class="timeline">
-            ${cultoData.programacao
-              .map(
-                (item) => `
-              <div class="timeline-item">
-                <div class="timeline-node" aria-hidden="true">
-                  ${heartCrossSvg(16, "#E0272D")}
-                </div>
-                <div class="timeline-card">
-                  <div class="timeline-meta">
-                    <span class="timeline-time">${item.horario}</span>
-                    <span class="chip">${item.tag}</span>
-                  </div>
-                  <h3 class="timeline-title">${item.titulo}</h3>
-                  <p style="color: var(--sepia); font-size: 0.95rem;">${item.descricao}</p>
-                </div>
-              </div>
-            `
-              )
-              .join("")}
+          <div class="preacher-card">
+            <div class="preacher-badge-avatar" aria-hidden="true">
+              JH
+            </div>
+            <div class="preacher-content">
+              <span class="chip">${cultoData.culto.preletorCargo}</span>
+              <h3>${cultoData.culto.preletor}</h3>
+              <p>${cultoData.culto.preletorBio}</p>
+            </div>
+            <div>
+              <a
+                href="${cultoData.culto.preletorInstagram}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn btn-primary"
+              >
+                ${instagramIconSvg(18, "#FAF7F2")}
+                Instagram ${cultoData.culto.preletorInstagramHandle} ↗
+              </a>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- 6 & 7. SOBRE O INOTI TEENS + COMO CHEGAR -->
-      <section class="about-location-section">
+      <!-- SOBRE O INOTI TEENS + COMO CHEGAR -->
+      <section id="como-chegar" class="about-location-section">
         <div class="container about-location-grid">
           <div class="card card-paper" style="display: flex; flex-direction: column; justify-content: space-between;">
             <div>
@@ -473,7 +402,7 @@ function renderCultPage() {
 
             <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; border-radius: 16px; background: rgba(217, 203, 181, 0.3); border: 1px solid var(--madeira);">
               <img
-                src="/assets/logo-inoti-teens.png"
+                src="./assets/logo-inoti-teens.png"
                 alt="Logo INOTI Teens"
                 style="width: 54px; height: 54px; object-fit: contain; border-radius: 12px; background: #fff; padding: 4px;"
               />
@@ -532,161 +461,55 @@ function renderCultPage() {
         </div>
       </section>
 
-      <!-- 8. CONFIRMAÇÃO DE PRESENÇA & COMPARTILHAR -->
-      <section id="confirmar" class="rsvp-section">
-        <div class="container rsvp-grid">
-          <div class="rsvp-form-card" id="rsvp-card-container">
-            ${renderRsvpContent()}
-          </div>
-
-          <div class="share-card">
-            <span class="chip" style="background: rgba(250, 247, 242, 0.2); color: #FAF7F2; border-color: rgba(250, 247, 242, 0.4);">
-              Convite Especial
-            </span>
-            <h3 style="font-family: var(--font-display); font-size: clamp(1.8rem, 3.5vw, 2.5rem); line-height: 1.12; margin: 0.85rem 0;">
-              Quem você vai trazer com você?
-            </h3>
-            <p style="opacity: 0.95; margin-bottom: 1.5rem;">
-              Um simples convite pode mudar a história de um amigo que precisa ouvir que os dias
-              dele estão nas mãos de Deus. Envie a mensagem já pronta com o endereço e o link da
-              nossa playlist!
-            </p>
-
-            <div style="background: rgba(18, 16, 18, 0.25); border-radius: 16px; padding: 1.1rem; font-size: 0.9rem; margin-bottom: 1.5rem; border: 1px solid rgba(250, 247, 242, 0.25);">
-              “Ei! No sábado (07/11 às 19h) vai rolar o culto do INOTI Teens com o tema
-              <strong> Ao Dono dos Meus Dias</strong> na Praça Haroldo Daltro, 460. Bora comigo? 🙌”
-            </div>
-
-            <a
-              href="${whatsappShareUrl}"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn"
-              style="background: var(--papel); color: var(--tinta); width: 100%;"
-            >
-              Chama um amigo no WhatsApp 📲
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <!-- 9. FAQ RÁPIDO -->
-      <section class="faq-section">
+      <!-- REDES SOCIAIS AO FINAL DO SITE -->
+      <section class="socials-section">
         <div class="container">
           <div class="section-header">
-            <span class="chip">Dúvidas Frequentes</span>
+            <span class="chip">Conecte-se Conosco</span>
             <h2 class="section-title">
-              Tudo o que você precisa <span class="gold">saber</span>
+              Nossas <span class="gold">Redes Sociais</span>
             </h2>
+            <p class="section-subtitle">
+              Siga os perfis oficiais do INOTI Teens, da Igreja Evangélica Caminho da Vida e da EBD para acompanhar nossos cultos, eventos e estudos.
+            </p>
           </div>
 
-          <div class="faq-grid">
-            ${cultoData.faq
+          <div class="socials-grid">
+            ${cultoData.redesSociais
               .map(
-                (item) => `
-              <div class="card card-paper">
-                <h3 style="font-family: var(--font-ui); font-weight: 700; font-size: 1.05rem; margin-bottom: 0.4rem; color: var(--tinta);">
-                  ${item.pergunta}
-                </h3>
-                <p style="color: var(--sepia); font-size: 0.94rem;">${item.resposta}</p>
-              </div>
+                (rede) => `
+              <a
+                href="${rede.url}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="social-card"
+              >
+                <div>
+                  <div class="social-card-top">
+                    <div class="social-icon-box">
+                      ${
+                        rede.tipo === "facebook"
+                          ? facebookIconSvg(22, "#A67C4E")
+                          : instagramIconSvg(22, "#E0272D")
+                      }
+                    </div>
+                    <span class="chip">${rede.destaque}</span>
+                  </div>
+                  <h3 class="social-title">${rede.nome}</h3>
+                  <span class="social-handle">${rede.handle}</span>
+                  <p class="social-desc">${rede.descricao}</p>
+                </div>
+                <span class="social-link-cta">
+                  Acessar página oficial ↗
+                </span>
+              </a>
             `
               )
               .join("")}
           </div>
         </div>
       </section>
-
-      <!-- STICKY BAR MOBILE -->
-      <div class="mobile-sticky-bar">
-        <div class="mobile-sticky-info">
-          <strong>Culto 07/11 às 19h</strong>
-          <span>Praça Haroldo Daltro, 460</span>
-        </div>
-        <a href="#confirmar" class="btn btn-primary" data-scroll-to="confirmar" style="padding: 0.65rem 1.2rem; font-size: 0.86rem;">
-          Confirmar presença
-        </a>
-      </div>
     </main>
-  `;
-}
-
-function renderRsvpContent() {
-  const whatsappShareUrl = getWhatsappShareUrl();
-
-  if (state.rsvpConfirmed) {
-    return `
-      <span class="chip">Presença Confirmada</span>
-      <div class="rsvp-success" role="status" style="margin-top: 1rem;">
-        <div style="margin-bottom: 0.65rem;">
-          ${heartCrossSvg(34, "#E0272D")}
-        </div>
-        <h3 style="font-family: var(--font-display); font-size: 1.65rem; margin-bottom: 0.4rem;">
-          Tá confirmado, ${state.rsvpNome}! Te esperamos 🙌
-        </h3>
-        <p style="color: var(--sepia); margin-bottom: 1.25rem;">
-          Anote na agenda: <strong>Sábado, 07/11 às 19h</strong> na
-          <strong> ${cultoData.culto.endereco}</strong>. Aproveite para chamar um amigo no WhatsApp!
-        </p>
-        <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center;">
-          <a href="${whatsappShareUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-            Chama um amigo no WhatsApp 💬
-          </a>
-          <button type="button" class="btn btn-secondary" id="btn-reset-rsvp">
-            Confirmar outra pessoa
-          </button>
-        </div>
-      </div>
-    `;
-  }
-
-  return `
-    <span class="chip">Presença Gratuita</span>
-    <h2 class="section-title" style="margin-top: 0.65rem;">
-      Quero estar <span class="gold">lá!</span>
-    </h2>
-    <p style="color: var(--sepia); margin-bottom: 1.5rem;">
-      Confirme sua presença em menos de 30 segundos para prepararmos a melhor recepção para você.
-    </p>
-
-    <form id="rsvp-form">
-      <div class="form-group">
-        <label class="form-label" for="rsvp-nome">Seu nome *</label>
-        <input
-          id="rsvp-nome"
-          type="text"
-          class="form-input"
-          placeholder="Ex.: Lucas Oliveira"
-          required
-          value="${state.rsvpNome}"
-        />
-      </div>
-
-      <div class="form-group">
-        <label class="form-label" for="rsvp-whats">Seu WhatsApp (opcional)</label>
-        <input
-          id="rsvp-whats"
-          type="tel"
-          class="form-input"
-          placeholder="(11) 99999-9999"
-          value="${state.rsvpWhatsapp}"
-        />
-      </div>
-
-      <div class="form-group">
-        <label class="form-label" for="rsvp-perfil">Você já faz parte do INOTI Teens?</label>
-        <select id="rsvp-perfil" class="form-input">
-          <option value="Sou do INOTI Teens">Já sou do INOTI Teens</option>
-          <option value="Sou visitante / convidado">É minha primeira vez / Sou convidado(a)</option>
-          <option value="Vou levar amigos">Vou com amigos!</option>
-        </select>
-      </div>
-
-      <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
-        ${heartCrossSvg(18, "#FAF7F2")}
-        Confirmar presença
-      </button>
-    </form>
   `;
 }
 
@@ -696,7 +519,7 @@ function renderFooter() {
       <div class="container footer-inner">
         <div style="display: flex; align-items: center; gap: 0.85rem;">
           <div class="brand-logo-wrap">
-            <img src="/assets/logo-inoti-teens.png" alt="Logo INOTI Teens" class="brand-logo-img" />
+            <img src="./assets/logo-inoti-teens.png" alt="Logo INOTI Teens" class="brand-logo-img" />
           </div>
           <div>
             <strong style="font-family: var(--font-ui); font-size: 1.05rem;">
@@ -798,73 +621,17 @@ function attachEvents() {
       heroSection.style.setProperty("--beam-y", `${y}%`);
     });
   }
-
-  const whatsInput = document.getElementById("rsvp-whats");
-  if (whatsInput) {
-    whatsInput.addEventListener("input", (e) => {
-      e.target.value = formatPhone(e.target.value);
-      state.rsvpWhatsapp = e.target.value;
-    });
-  }
-
-  const form = document.getElementById("rsvp-form");
-  if (form) {
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const nomeInput = document.getElementById("rsvp-nome");
-      if (!nomeInput || !nomeInput.value.trim()) return;
-      state.rsvpNome = nomeInput.value.trim();
-      state.rsvpConfirmed = true;
-      const rsvpContainer = document.getElementById("rsvp-card-container");
-      if (rsvpContainer) {
-        rsvpContainer.innerHTML = renderRsvpContent();
-        attachRsvpReset();
-      }
-    });
-  }
-
-  attachRsvpReset();
-}
-
-function attachRsvpReset() {
-  const resetBtn = document.getElementById("btn-reset-rsvp");
-  if (resetBtn) {
-    resetBtn.addEventListener("click", () => {
-      state.rsvpConfirmed = false;
-      state.rsvpNome = "";
-      state.rsvpWhatsapp = "";
-      const rsvpContainer = document.getElementById("rsvp-card-container");
-      if (rsvpContainer) {
-        rsvpContainer.innerHTML = renderRsvpContent();
-        attachEvents();
-      }
-    });
-  }
 }
 
 // Inicialização da rota por hash
 const initialHash = window.location.hash.replace("#", "");
-if (initialHash === "cultos" || initialHash === "confirmar" || initialHash === "louvores") {
+if (initialHash === "cultos" || initialHash === "como-chegar" || initialHash === "louvores") {
   state.activeTab = "cultos";
 } else if (initialHash === "sobre" || initialHash === "eventos" || initialHash === "inicio") {
   state.activeTab = initialHash;
 }
 
 renderApp();
-
-// Atualização em tempo real da contagem regressiva
-setInterval(() => {
-  if (state.activeTab !== "cultos") return;
-  const t = calculateTimeLeft(cultoData.culto.dataISO);
-  const elDias = document.getElementById("cd-dias");
-  const elHoras = document.getElementById("cd-horas");
-  const elMin = document.getElementById("cd-minutos");
-  const elSeg = document.getElementById("cd-segundos");
-  if (elDias) elDias.textContent = t.dias;
-  if (elHoras) elHoras.textContent = t.horas;
-  if (elMin) elMin.textContent = t.minutos;
-  if (elSeg) elSeg.textContent = t.segundos;
-}, 1000);
 
 // Parallax suave na arte da cruz no scroll
 window.addEventListener(

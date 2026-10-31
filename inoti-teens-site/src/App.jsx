@@ -10,7 +10,7 @@ export function App() {
 
   useEffect(() => {
     const hash = window.location.hash.replace("#", "");
-    if (hash === "cultos" || hash === "confirmar" || hash === "louvores") {
+    if (hash === "cultos" || hash === "como-chegar" || hash === "louvores") {
       setActiveTab("cultos");
     } else if (hash === "sobre" || hash === "eventos" || hash === "inicio") {
       setActiveTab(hash);
