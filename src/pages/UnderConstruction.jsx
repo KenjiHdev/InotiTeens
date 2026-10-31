@@ -1,8 +1,19 @@
 import React from "react";
 import { cultoData } from "../data/cultoData.js";
-import { HeartCrossIcon } from "../components/Icons.jsx";
+import {
+  HeartCrossIcon,
+  SpotifyIcon,
+  MapPinIcon,
+  WhatsAppIcon,
+} from "../components/Icons.jsx";
 
 export function UnderConstruction({ sectionName = "Portal Geral", onGoToCult }) {
+  const getWhatsAppShareLink = () => {
+    const currentUrl = window.location.href.split("#")[0] + "#cultos";
+    const text = `Fala galera! Bora pro Culto do INOTI Teens "Ao Dono dos Meus Dias"?\n\n📅 Sábado, 07/11 às 19h\n🎙️ Ministração: Pr. Joel Hayashi\n📍 Local: Praça Haroldo Daltro, 460 (Igreja Evangélica Caminho da Vida - Vila Carrão)\n\nConfere aqui:\n${currentUrl}`;
+    return `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+  };
+
   return (
     <main className="under-construction-page">
       <div className="container">
@@ -10,7 +21,7 @@ export function UnderConstruction({ sectionName = "Portal Geral", onGoToCult }) 
           <div>
             <div className="uc-logo-card">
               <img
-                src="/assets/logo-inoti-teens.png"
+                src="./assets/logo-inoti-teens.png"
                 alt="Logo INOTI Teens"
               />
               <div>
@@ -18,13 +29,13 @@ export function UnderConstruction({ sectionName = "Portal Geral", onGoToCult }) 
                   style={{
                     fontFamily: "var(--font-ui)",
                     fontWeight: 700,
-                    fontSize: "1.2rem",
+                    fontSize: "1.1rem",
                     color: "var(--tinta)",
                   }}
                 >
                   INOTI <span style={{ color: "var(--teens)" }}>TEENS</span>
                 </div>
-                <div style={{ fontSize: "0.85rem", color: "var(--sepia)" }}>
+                <div style={{ fontSize: "0.8rem", color: "var(--sepia)" }}>
                   {cultoData.grupo.igreja}
                 </div>
               </div>
@@ -89,9 +100,9 @@ export function UnderConstruction({ sectionName = "Portal Geral", onGoToCult }) 
             <h2
               style={{
                 fontFamily: "var(--font-display)",
-                fontSize: "1.9rem",
-                marginTop: "0.75rem",
-                lineHeight: 1.12,
+                fontSize: "clamp(1.5rem, 5vw, 1.9rem)",
+                marginTop: "0.65rem",
+                lineHeight: 1.14,
               }}
             >
               Culto Especial:{" "}
@@ -101,9 +112,9 @@ export function UnderConstruction({ sectionName = "Portal Geral", onGoToCult }) 
             </h2>
             <p
               style={{
-                fontSize: "0.92rem",
-                color: "rgba(250, 247, 242, 0.8)",
-                marginTop: "0.4rem",
+                fontSize: "0.88rem",
+                color: "rgba(250, 247, 242, 0.82)",
+                marginTop: "0.35rem",
               }}
             >
               {cultoData.culto.versiculoReferencia} — “{cultoData.culto.versiculoTexto}”
@@ -111,24 +122,22 @@ export function UnderConstruction({ sectionName = "Portal Geral", onGoToCult }) 
 
             <div className="uc-art-preview">
               <img
-                src="/assets/arte-culto.jpg"
+                src="./assets/arte-culto.jpg"
                 alt="Arte do culto Ao Dono dos Meus Dias"
               />
             </div>
 
             <div
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                flexWrap: "wrap",
-                gap: "0.5rem",
-                fontSize: "0.88rem",
+                display: "grid",
+                gap: "0.35rem",
+                fontSize: "0.85rem",
                 color: "var(--madeira)",
-                marginBottom: "1.2rem",
+                marginBottom: "1.1rem",
               }}
             >
-              <span>📅 {cultoData.culto.dataCurta} às {cultoData.culto.horario}</span>
-              <span>🎙️ {cultoData.culto.preletor}</span>
+              <span>📅 <strong>{cultoData.culto.diaSemana}, {cultoData.culto.dataCurta} às {cultoData.culto.horario}</strong></span>
+              <span>🎙️ Ministração: <strong>{cultoData.culto.preletor}</strong></span>
               <span>📍 {cultoData.culto.endereco}</span>
             </div>
 
@@ -143,6 +152,55 @@ export function UnderConstruction({ sectionName = "Portal Geral", onGoToCult }) 
           </aside>
         </div>
       </div>
+
+      {/* Barra inferior rápida no celular */}
+      <nav className="mobile-quick-bar" aria-label="Atalhos rápidos no celular">
+        <button
+          type="button"
+          className="mobile-quick-link highlight"
+          onClick={onGoToCult}
+        >
+          <HeartCrossIcon size={16} color="#FAF7F2" />
+          <span>Culto 07/11</span>
+        </button>
+        <button
+          type="button"
+          className="mobile-quick-link"
+          onClick={() => {
+            onGoToCult();
+            setTimeout(() => {
+              const el = document.getElementById("louvores");
+              if (el) el.scrollIntoView({ behavior: "smooth" });
+            }, 60);
+          }}
+        >
+          <SpotifyIcon size={16} color="#FAF7F2" />
+          <span>Louvores</span>
+        </button>
+        <button
+          type="button"
+          className="mobile-quick-link"
+          onClick={() => {
+            onGoToCult();
+            setTimeout(() => {
+              const el = document.getElementById("como-chegar");
+              if (el) el.scrollIntoView({ behavior: "smooth" });
+            }, 60);
+          }}
+        >
+          <MapPinIcon size={16} color="#FAF7F2" />
+          <span>Local</span>
+        </button>
+        <a
+          href={getWhatsAppShareLink()}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mobile-quick-link"
+        >
+          <WhatsAppIcon size={16} color="#25D366" />
+          <span>WhatsApp</span>
+        </a>
+      </nav>
     </main>
   );
 }

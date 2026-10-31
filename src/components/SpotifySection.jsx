@@ -37,7 +37,7 @@ export function SpotifySection() {
               </li>
             </ul>
 
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.65rem" }}>
               <a
                 href={cultoData.culto.spotifyPlaylistUrl}
                 target="_blank"
@@ -45,6 +45,16 @@ export function SpotifySection() {
                 className="btn btn-spotify"
               >
                 Ouvir Playlist no App Spotify ↗
+              </a>
+              <a
+                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+                  `Galera, ouçam a playlist oficial dos louvores do Culto INOTI Teens "Ao Dono dos Meus Dias" no Spotify: ${cultoData.culto.spotifyPlaylistUrl}`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-whatsapp"
+              >
+                Compartilhar Playlist no WhatsApp
               </a>
             </div>
           </div>

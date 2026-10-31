@@ -22,6 +22,93 @@ const facebookIconSvg = (size = 20, color = "currentColor") => `
   </svg>
 `;
 
+const whatsappIconSvg = (size = 18, color = "currentColor") => `
+  <svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+  </svg>
+`;
+
+const mapPinIconSvg = (size = 18, color = "currentColor") => `
+  <svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+    <circle cx="12" cy="10" r="3"/>
+  </svg>
+`;
+
+const spotifyIconSvg = (size = 18, color = "currentColor") => `
+  <svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="M8 15a7.5 7.5 0 0 1 8-1"/>
+    <path d="M7 12a10.5 10.5 0 0 1 10-1.5"/>
+    <path d="M6 9a13.5 13.5 0 0 1 12-2"/>
+  </svg>
+`;
+
+const clockIconSvg = (size = 18, color = "currentColor") => `
+  <svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="10"/>
+    <polyline points="12 6 12 12 16 14"/>
+  </svg>
+`;
+
+function getWhatsAppShareLink() {
+  const currentUrl = window.location.href.split("#")[0] + "#cultos";
+  const message = `Fala galera! Bora pro Culto do INOTI Teens "Ao Dono dos Meus Dias"?\n\n📅 Sábado, 07/11 às 19h\n🎙️ Ministração: Pr. Joel Hayashi\n📍 Local: Praça Haroldo Daltro, 460 (Igreja Evangélica Caminho da Vida - Vila Carrão)\n\nOuça os louvores no Spotify e confira o mapa aqui:\n${currentUrl}`;
+  return `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+}
+
+function getRemainingTime() {
+  const targetDate = new Date(cultoData.culto.dataISO).getTime();
+  const now = new Date().getTime();
+  const diff = targetDate - now;
+
+  if (diff <= 0) {
+    return { days: "00", hours: "00", minutes: "00", seconds: "00" };
+  }
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+  return {
+    days: String(days).padStart(2, "0"),
+    hours: String(hours).padStart(2, "0"),
+    minutes: String(minutes).padStart(2, "0"),
+    seconds: String(seconds).padStart(2, "0"),
+  };
+}
+
+function renderCountdownHtml() {
+  const time = getRemainingTime();
+  return `
+    <div class="countdown-box" id="cult-countdown" aria-label="Contagem regressiva até o culto">
+      <div class="countdown-header">
+        ${clockIconSvg(15, "#F2B661")}
+        <span>Faltam para o Culto (07/11 às 19h)</span>
+      </div>
+      <div class="countdown-grid">
+        <div class="countdown-tile">
+          <span class="countdown-num" id="cd-days">${time.days}</span>
+          <span class="countdown-label">Dias</span>
+        </div>
+        <div class="countdown-tile">
+          <span class="countdown-num" id="cd-hours">${time.hours}</span>
+          <span class="countdown-label">Horas</span>
+        </div>
+        <div class="countdown-tile">
+          <span class="countdown-num" id="cd-mins">${time.minutes}</span>
+          <span class="countdown-label">Min</span>
+        </div>
+        <div class="countdown-tile">
+          <span class="countdown-num" id="cd-secs">${time.seconds}</span>
+          <span class="countdown-label">Seg</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 const crownOfThornsDividerHtml = () => `
   <div class="thorn-divider" role="separator" aria-hidden="true">
     <svg class="thorn-icon-spin" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -162,6 +249,26 @@ function renderUnderConstruction(sectionName) {
           </aside>
         </div>
       </div>
+
+      <!-- Barra inferior móvel também disponível na página Em Construção -->
+      <nav class="mobile-quick-bar" aria-label="Atalhos rápidos no celular">
+        <button type="button" class="mobile-quick-link highlight" data-tab-target="cultos">
+          ${heartCrossSvg(16, "#FAF7F2")}
+          <span>Culto 07/11</span>
+        </button>
+        <button type="button" class="mobile-quick-link" data-tab-target="cultos" data-target-hash="louvores">
+          ${spotifyIconSvg(16, "#FAF7F2")}
+          <span>Louvores</span>
+        </button>
+        <button type="button" class="mobile-quick-link" data-tab-target="cultos" data-target-hash="como-chegar">
+          ${mapPinIconSvg(16, "#FAF7F2")}
+          <span>Local</span>
+        </button>
+        <a href="${getWhatsAppShareLink()}" target="_blank" rel="noopener noreferrer" class="mobile-quick-link">
+          ${whatsappIconSvg(16, "#25D366")}
+          <span>WhatsApp</span>
+        </a>
+      </nav>
     </main>
   `;
 }
@@ -206,27 +313,35 @@ function renderCultPage() {
               os jovens da <strong>${cultoData.grupo.igreja}</strong>.
             </p>
 
+            ${renderCountdownHtml()}
+
             <div class="hero-info-strip">
               <div class="hero-info-item">
-                <span class="hero-info-label">Quando</span>
+                <span class="hero-info-label">📅 Quando</span>
                 <span class="hero-info-value">${cultoData.culto.diaSemana}, ${cultoData.culto.dataCurta} · ${cultoData.culto.horario}</span>
               </div>
               <div class="hero-info-item">
-                <span class="hero-info-label">Ministração</span>
+                <span class="hero-info-label">🎙️ Ministração</span>
                 <span class="hero-info-value">${cultoData.culto.preletor}</span>
               </div>
               <div class="hero-info-item">
-                <span class="hero-info-label">Onde</span>
+                <span class="hero-info-label">📍 Onde</span>
                 <span class="hero-info-value">${cultoData.culto.endereco}</span>
               </div>
             </div>
 
             <div class="hero-actions">
               <a href="#louvores" class="btn btn-primary" data-scroll-to="louvores">
-                🎧 Ouvir Playlist no Spotify
+                ${spotifyIconSvg(18, "#FAF7F2")}
+                <span>Ouvir Louvores no Spotify</span>
+              </a>
+              <a href="${getWhatsAppShareLink()}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
+                ${whatsappIconSvg(18, "#ffffff")}
+                <span>Convidar no WhatsApp</span>
               </a>
               <a href="#como-chegar" class="btn btn-secondary-light" data-scroll-to="como-chegar">
-                📍 Como Chegar
+                ${mapPinIconSvg(18, "#FAF7F2")}
+                <span>Como Chegar</span>
               </a>
             </div>
           </div>
@@ -324,7 +439,7 @@ function renderCultPage() {
                 </li>
               </ul>
 
-              <div>
+              <div style="display: flex; flex-direction: column; gap: 0.65rem;">
                 <a
                   href="${cultoData.culto.spotifyPlaylistUrl}"
                   target="_blank"
@@ -332,6 +447,17 @@ function renderCultPage() {
                   class="btn btn-spotify"
                 >
                   Ouvir Playlist no App Spotify ↗
+                </a>
+                <a
+                  href="https://api.whatsapp.com/send?text=${encodeURIComponent(
+                    `Galera, ouçam a playlist oficial dos louvores do Culto INOTI Teens "Ao Dono dos Meus Dias" no Spotify: ${cultoData.culto.spotifyPlaylistUrl}`
+                  )}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn btn-whatsapp"
+                >
+                  ${whatsappIconSvg(18, "#ffffff")}
+                  <span>Compartilhar Playlist no WhatsApp</span>
                 </a>
               </div>
             </div>
@@ -510,16 +636,23 @@ function renderCultPage() {
         </div>
       </section>
 
-      <!-- BARRA INFERIOR DE NAVEGAÇÃO RÁPIDA NO CELULAR -->
+      <!-- BARRA INFERIOR DE NAVEGAÇÃO RÁPIDA NO CELULAR (4 ATALHOS) -->
       <nav class="mobile-quick-bar" aria-label="Atalhos rápidos do culto no celular">
         <a href="#louvores" class="mobile-quick-link highlight" data-scroll-to="louvores">
-          🎧 Louvores
+          ${spotifyIconSvg(16, "#FAF7F2")}
+          <span>Louvores</span>
         </a>
         <a href="#como-chegar" class="mobile-quick-link" data-scroll-to="como-chegar">
-          📍 Como Chegar
+          ${mapPinIconSvg(16, "#FAF7F2")}
+          <span>Como Chegar</span>
+        </a>
+        <a href="${getWhatsAppShareLink()}" target="_blank" rel="noopener noreferrer" class="mobile-quick-link">
+          ${whatsappIconSvg(16, "#25D366")}
+          <span>WhatsApp</span>
         </a>
         <a href="#redes-sociais" class="mobile-quick-link" data-scroll-to="redes-sociais">
-          📱 Redes
+          ${instagramIconSvg(16, "#FAF7F2")}
+          <span>Redes</span>
         </a>
       </nav>
     </main>
@@ -598,15 +731,44 @@ function renderApp() {
   attachEvents();
 }
 
+let countdownInterval = null;
+
+function startCountdown() {
+  if (countdownInterval) {
+    clearInterval(countdownInterval);
+  }
+  countdownInterval = setInterval(() => {
+    const cdDays = document.getElementById("cd-days");
+    const cdHours = document.getElementById("cd-hours");
+    const cdMins = document.getElementById("cd-mins");
+    const cdSecs = document.getElementById("cd-secs");
+    if (!cdDays || !cdHours || !cdMins || !cdSecs) return;
+
+    const time = getRemainingTime();
+    cdDays.textContent = time.days;
+    cdHours.textContent = time.hours;
+    cdMins.textContent = time.minutes;
+    cdSecs.textContent = time.seconds;
+  }, 1000);
+}
+
 function attachEvents() {
   document.querySelectorAll("[data-tab-target]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const targetTab = btn.getAttribute("data-tab-target");
+      const targetHash = btn.getAttribute("data-target-hash");
       if (targetTab) {
         state.activeTab = targetTab;
-        window.history.replaceState(null, "", `#${targetTab}`);
+        window.history.replaceState(null, "", `#${targetHash || targetTab}`);
         renderApp();
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        if (targetHash) {
+          setTimeout(() => {
+            const el = document.getElementById(targetHash);
+            if (el) el.scrollIntoView({ behavior: "smooth" });
+          }, 60);
+        } else {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
       }
     });
   });
@@ -632,6 +794,8 @@ function attachEvents() {
       heroSection.style.setProperty("--beam-y", `${y}%`);
     });
   }
+
+  startCountdown();
 }
 
 // Inicialização da rota por hash

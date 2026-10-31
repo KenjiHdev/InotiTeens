@@ -1,11 +1,51 @@
 import React, { useState, useEffect } from "react";
 import { cultoData } from "../data/cultoData.js";
-import { HeartCrossIcon, CrownOfThornsDivider } from "../components/Icons.jsx";
+import {
+  HeartCrossIcon,
+  CrownOfThornsDivider,
+  WhatsAppIcon,
+  SpotifyIcon,
+  MapPinIcon,
+  ClockIcon,
+  InstagramIcon,
+} from "../components/Icons.jsx";
 import { SpotifySection } from "../components/SpotifySection.jsx";
 
 export function CultPage() {
   const [beamPos, setBeamPos] = useState({ x: 50, y: 0 });
   const [parallaxY, setParallaxY] = useState(0);
+  const [timeLeft, setTimeLeft] = useState({
+    days: "00",
+    hours: "00",
+    minutes: "00",
+    seconds: "00",
+  });
+
+  useEffect(() => {
+    const calcTime = () => {
+      const targetDate = new Date(cultoData.culto.dataISO).getTime();
+      const now = new Date().getTime();
+      const diff = targetDate - now;
+      if (diff <= 0) {
+        setTimeLeft({ days: "00", hours: "00", minutes: "00", seconds: "00" });
+        return;
+      }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      setTimeLeft({
+        days: String(days).padStart(2, "0"),
+        hours: String(hours).padStart(2, "0"),
+        minutes: String(minutes).padStart(2, "0"),
+        seconds: String(seconds).padStart(2, "0"),
+      });
+    };
+
+    calcTime();
+    const timer = setInterval(calcTime, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => {
@@ -23,11 +63,18 @@ export function CultPage() {
     setBeamPos({ x, y });
   };
 
+  const getWhatsAppShareLink = () => {
+    const currentUrl = window.location.href.split("#")[0] + "#cultos";
+    const text = `Fala galera! Bora pro Culto do INOTI Teens "Ao Dono dos Meus Dias"?\n\n📅 Sábado, 07/11 às 19h\n🎙️ Ministração: Pr. Joel Hayashi\n📍 Local: Praça Haroldo Daltro, 460 (Igreja Evangélica Caminho da Vida - Vila Carrão)\n\nOuça os louvores no Spotify e veja os detalhes aqui:\n${currentUrl}`;
+    return `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+  };
+
   return (
     <main>
       {/* 1. HERO: MODO ESCURO "PALCO" COM BRILHO ÂMBAR E ARTE EM XILOGRAVURA */}
       <section
         className="cult-hero"
+        id="cult-hero-section"
         onMouseMove={handleHeroMouseMove}
         style={{
           "--beam-x": `${beamPos.x}%`,
@@ -71,30 +118,67 @@ export function CultPage() {
               <strong>{cultoData.grupo.igreja}</strong>.
             </p>
 
-            {/* Informações essenciais visíveis sem rolar */}
+            {/* Contagem regressiva mobile-first */}
+            <div className="countdown-box" id="cult-countdown" aria-label="Contagem regressiva até o culto">
+              <div className="countdown-header">
+                <ClockIcon size={15} color="#F2B661" />
+                <span>Faltam para o Culto (07/11 às 19h)</span>
+              </div>
+              <div className="countdown-grid">
+                <div className="countdown-tile">
+                  <span className="countdown-num">{timeLeft.days}</span>
+                  <span className="countdown-label">Dias</span>
+                </div>
+                <div className="countdown-tile">
+                  <span className="countdown-num">{timeLeft.hours}</span>
+                  <span className="countdown-label">Horas</span>
+                </div>
+                <div className="countdown-tile">
+                  <span className="countdown-num">{timeLeft.minutes}</span>
+                  <span className="countdown-label">Min</span>
+                </div>
+                <div className="countdown-tile">
+                  <span className="countdown-num">{timeLeft.seconds}</span>
+                  <span className="countdown-label">Seg</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Informações essenciais com adaptação 1 coluna abaixo de 440px */}
             <div className="hero-info-strip">
               <div className="hero-info-item">
-                <span className="hero-info-label">Quando</span>
+                <span className="hero-info-label">📅 Quando</span>
                 <span className="hero-info-value">
                   {cultoData.culto.diaSemana}, {cultoData.culto.dataCurta} · {cultoData.culto.horario}
                 </span>
               </div>
               <div className="hero-info-item">
-                <span className="hero-info-label">Ministração</span>
+                <span className="hero-info-label">🎙️ Ministração</span>
                 <span className="hero-info-value">{cultoData.culto.preletor}</span>
               </div>
               <div className="hero-info-item">
-                <span className="hero-info-label">Onde</span>
+                <span className="hero-info-label">📍 Onde</span>
                 <span className="hero-info-value">{cultoData.culto.endereco}</span>
               </div>
             </div>
 
             <div className="hero-actions">
               <a href="#louvores" className="btn btn-primary">
-                🎧 Ouvir Playlist no Spotify
+                <SpotifyIcon size={18} color="#FAF7F2" />
+                <span>Ouvir Louvores no Spotify</span>
+              </a>
+              <a
+                href={getWhatsAppShareLink()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-whatsapp"
+              >
+                <WhatsAppIcon size={18} color="#ffffff" />
+                <span>Convidar no WhatsApp</span>
               </a>
               <a href="#como-chegar" className="btn btn-secondary-light">
-                📍 Como Chegar
+                <MapPinIcon size={18} color="#FAF7F2" />
+                <span>Como Chegar</span>
               </a>
             </div>
           </div>
@@ -324,16 +408,28 @@ export function CultPage() {
         </div>
       </section>
 
-      {/* BARRA INFERIOR DE NAVEGAÇÃO RÁPIDA NO CELULAR */}
+      {/* BARRA INFERIOR DE NAVEGAÇÃO RÁPIDA NO CELULAR (4 ATALHOS) */}
       <nav className="mobile-quick-bar" aria-label="Atalhos rápidos do culto no celular">
         <a href="#louvores" className="mobile-quick-link highlight">
-          🎧 Louvores
+          <SpotifyIcon size={16} color="#FAF7F2" />
+          <span>Louvores</span>
         </a>
         <a href="#como-chegar" className="mobile-quick-link">
-          📍 Como Chegar
+          <MapPinIcon size={16} color="#FAF7F2" />
+          <span>Como Chegar</span>
+        </a>
+        <a
+          href={getWhatsAppShareLink()}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mobile-quick-link"
+        >
+          <WhatsAppIcon size={16} color="#25D366" />
+          <span>WhatsApp</span>
         </a>
         <a href="#redes-sociais" className="mobile-quick-link">
-          📱 Redes
+          <InstagramIcon size={16} color="#FAF7F2" />
+          <span>Redes</span>
         </a>
       </nav>
     </main>
