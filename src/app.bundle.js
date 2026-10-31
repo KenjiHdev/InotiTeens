@@ -8,7 +8,7 @@ const heartCrossSvg = (size = 18, color = "#E0272D") => `
   </svg>
 `;
 
-const instagramIconSvg = (size = 22, color = "currentColor") => `
+const instagramIconSvg = (size = 20, color = "currentColor") => `
   <svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
     <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
@@ -16,7 +16,7 @@ const instagramIconSvg = (size = 22, color = "currentColor") => `
   </svg>
 `;
 
-const facebookIconSvg = (size = 22, color = "currentColor") => `
+const facebookIconSvg = (size = 20, color = "currentColor") => `
   <svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
     <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
   </svg>
@@ -39,9 +39,9 @@ const state = {
 function renderNavbar() {
   const tabs = [
     { id: "inicio", label: "Início" },
-    { id: "cultos", label: "Cultos", badge: "07/11 · Novo" },
-    { id: "sobre", label: "Sobre o INOTI" },
-    { id: "eventos", label: "Agenda & Fotos" },
+    { id: "cultos", label: "Cultos", badge: "07/11" },
+    { id: "sobre", label: "Sobre" },
+    { id: "eventos", label: "Agenda" },
   ];
 
   return `
@@ -89,10 +89,10 @@ function renderUnderConstruction(sectionName) {
             <div class="uc-logo-card">
               <img src="./assets/logo-inoti-teens.png" alt="Logo INOTI Teens" />
               <div>
-                <div style="font-family: var(--font-ui); font-weight: 700; font-size: 1.2rem; color: var(--tinta);">
+                <div style="font-family: var(--font-ui); font-weight: 700; font-size: 1.1rem; color: var(--tinta);">
                   INOTI <span style="color: var(--teens);">TEENS</span>
                 </div>
-                <div style="font-size: 0.85rem; color: var(--sepia);">
+                <div style="font-size: 0.8rem; color: var(--sepia);">
                   ${cultoData.grupo.igreja}
                 </div>
               </div>
@@ -124,12 +124,12 @@ function renderUnderConstruction(sectionName) {
               <div class="uc-progress-bar">
                 <div class="uc-progress-fill"></div>
               </div>
-              <p style="font-size: 0.82rem; color: var(--sepia); margin-top: 0.55rem;">
+              <p style="font-size: 0.8rem; color: var(--sepia); margin-top: 0.5rem;">
                 Disponível agora: <strong>Aba Cultos → “Ao Dono dos Meus Dias”</strong>
               </p>
             </div>
 
-            <div style="display: flex; flex-wrap: wrap; gap: 0.85rem;">
+            <div>
               <button type="button" class="btn btn-primary" data-tab-target="cultos">
                 ${heartCrossSvg(18, "#FAF7F2")}
                 Acessar Aba do Culto (07/11) →
@@ -139,10 +139,10 @@ function renderUnderConstruction(sectionName) {
 
           <aside class="uc-cult-spotlight">
             <span class="chip chip-dark">Já disponível na aba Cultos</span>
-            <h2 style="font-family: var(--font-display); font-size: 1.9rem; margin-top: 0.75rem; line-height: 1.12;">
+            <h2 style="font-family: var(--font-display); font-size: clamp(1.5rem, 5vw, 1.9rem); margin-top: 0.65rem; line-height: 1.14;">
               Culto Especial: <span style="color: var(--brasa);">${cultoData.culto.tema}</span>
             </h2>
-            <p style="font-size: 0.92rem; color: rgba(250, 247, 242, 0.8); margin-top: 0.4rem;">
+            <p style="font-size: 0.88rem; color: rgba(250, 247, 242, 0.82); margin-top: 0.35rem;">
               ${cultoData.culto.versiculoReferencia} — “${cultoData.culto.versiculoTexto}”
             </p>
 
@@ -150,9 +150,9 @@ function renderUnderConstruction(sectionName) {
               <img src="./assets/arte-culto.jpg" alt="Arte do culto Ao Dono dos Meus Dias" />
             </div>
 
-            <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; font-size: 0.88rem; color: var(--madeira); margin-bottom: 1.2rem;">
-              <span>📅 ${cultoData.culto.dataCurta} às ${cultoData.culto.horario}</span>
-              <span>🎙️ ${cultoData.culto.preletor}</span>
+            <div style="display: grid; gap: 0.35rem; font-size: 0.85rem; color: var(--madeira); margin-bottom: 1.1rem;">
+              <span>📅 <strong>${cultoData.culto.diaSemana}, ${cultoData.culto.dataCurta} às ${cultoData.culto.horario}</strong></span>
+              <span>🎙️ Ministração: <strong>${cultoData.culto.preletor}</strong></span>
               <span>📍 ${cultoData.culto.endereco}</span>
             </div>
 
@@ -169,7 +169,7 @@ function renderUnderConstruction(sectionName) {
 function renderCultPage() {
   return `
     <main>
-      <!-- 1. HERO (Sem botão de Confirmar Presença) -->
+      <!-- 1. HERO MOBILE-FIRST -->
       <section class="cult-hero" id="cult-hero-section">
         <div class="ember-container" aria-hidden="true">
           <span class="ember"></span>
@@ -183,7 +183,7 @@ function renderCultPage() {
           <div>
             <div class="hero-top-meta">
               <span class="chip chip-dark">
-                ${heartCrossSvg(15, "#F2B661")}
+                ${heartCrossSvg(14, "#F2B661")}
                 Culto INOTI Teens · ${cultoData.culto.dataCurta} às ${cultoData.culto.horario}
               </span>
               <span class="chip chip-dark">Entrada Franca</span>
@@ -279,7 +279,7 @@ function renderCultPage() {
                 <span class="message-number">0${idx + 1}</span>
                 <h3 class="message-title">${msg.titulo}</h3>
                 <div class="message-sub">${msg.subtitulo}</div>
-                <p style="color: var(--sepia); font-size: 0.96rem;">${msg.texto}</p>
+                <p style="color: var(--sepia); font-size: 0.94rem;">${msg.texto}</p>
               </article>
             `
               )
@@ -296,7 +296,7 @@ function renderCultPage() {
           <div class="spotify-card">
             <div class="spotify-info">
               <span class="chip chip-dark">
-                ${heartCrossSvg(15, "#F2B661")}
+                ${heartCrossSvg(14, "#F2B661")}
                 Louvores do Culto · Spotify Oficial
               </span>
               <h3>
@@ -311,20 +311,20 @@ function renderCultPage() {
 
               <ul class="spotify-highlights">
                 <li>
-                  ${heartCrossSvg(16, "#F2B661")}
+                  ${heartCrossSvg(15, "#F2B661")}
                   <span>Ouça as faixas direto aqui na página ou salve no seu Spotify</span>
                 </li>
                 <li>
-                  ${heartCrossSvg(16, "#F2B661")}
+                  ${heartCrossSvg(15, "#F2B661")}
                   <span>Canções alinhadas ao tema do Salmo 31.15 — entrega e confiança</span>
                 </li>
                 <li>
-                  ${heartCrossSvg(16, "#F2B661")}
+                  ${heartCrossSvg(15, "#F2B661")}
                   <span>Compartilhe a playlist no grupo dos amigos</span>
                 </li>
               </ul>
 
-              <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+              <div>
                 <a
                   href="${cultoData.culto.spotifyPlaylistUrl}"
                   target="_blank"
@@ -339,10 +339,10 @@ function renderCultPage() {
             <div class="spotify-iframe-wrap">
               <iframe
                 title="Playlist Oficial do Culto Ao Dono dos Meus Dias no Spotify"
-                style="border-radius: 16px; border: 0;"
+                style="border-radius: 14px; border: 0; display: block;"
                 src="${cultoData.culto.spotifyEmbedUrl}"
                 width="100%"
-                height="380"
+                height="352"
                 allowfullscreen
                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                 loading="lazy"
@@ -385,32 +385,32 @@ function renderCultPage() {
           <div class="card card-paper" style="display: flex; flex-direction: column; justify-content: space-between;">
             <div>
               <span class="chip">Sobre nós</span>
-              <h2 class="section-title" style="margin-top: 0.75rem;">
+              <h2 class="section-title" style="margin-top: 0.65rem;">
                 Quem é o <span class="gold">INOTI Teens</span>?
               </h2>
-              <p style="color: var(--sepia); margin-bottom: 1.1rem;">
+              <p style="color: var(--sepia); font-size: 0.95rem; margin-bottom: 0.9rem;">
                 Somos a juventude da <strong>${cultoData.grupo.igreja}</strong>. Acreditamos em uma
                 geração autêntica, apaixonada por Jesus e que vive a fé de forma real no dia a dia
                 — na escola, na faculdade, em casa e com os amigos.
               </p>
-              <p style="color: var(--sepia); margin-bottom: 1.5rem;">
+              <p style="color: var(--sepia); font-size: 0.95rem; margin-bottom: 1.25rem;">
                 No culto <strong>“${cultoData.culto.tema}”</strong>, receberemos o
                 <strong> ${cultoData.culto.preletor}</strong> para uma noite de renovação espiritual.
                 Mesmo que seja a sua primeira vez em uma igreja, este lugar também é para você!
               </p>
             </div>
 
-            <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; border-radius: 16px; background: rgba(217, 203, 181, 0.3); border: 1px solid var(--madeira);">
+            <div style="display: flex; align-items: center; gap: 0.85rem; padding: 0.85rem; border-radius: 14px; background: rgba(217, 203, 181, 0.3); border: 1px solid var(--madeira);">
               <img
                 src="./assets/logo-inoti-teens.png"
                 alt="Logo INOTI Teens"
-                style="width: 54px; height: 54px; object-fit: contain; border-radius: 12px; background: #fff; padding: 4px;"
+                style="width: 48px; height: 48px; object-fit: contain; border-radius: 10px; background: #fff; padding: 4px; flex-shrink: 0;"
               />
               <div>
-                <strong style="display: block; font-family: var(--font-ui);">
+                <strong style="display: block; font-family: var(--font-ui); font-size: 0.92rem;">
                   ${cultoData.grupo.nome} · ${cultoData.grupo.igreja}
                 </strong>
-                <span style="font-size: 0.86rem; color: var(--sepia);">
+                <span style="font-size: 0.8rem; color: var(--sepia);">
                   “${cultoData.grupo.slogan}”
                 </span>
               </div>
@@ -419,10 +419,10 @@ function renderCultPage() {
 
           <div class="card card-paper">
             <span class="chip">Como Chegar</span>
-            <h2 class="section-title" style="margin-top: 0.75rem;">
+            <h2 class="section-title" style="margin-top: 0.65rem;">
               Nos vemos na <span class="gold">Igreja</span>
             </h2>
-            <p style="color: var(--sepia);">
+            <p style="color: var(--sepia); font-size: 0.94rem;">
               📍 <strong>${cultoData.culto.endereco}</strong> — ${cultoData.culto.bairroCidade}
             </p>
 
@@ -462,7 +462,7 @@ function renderCultPage() {
       </section>
 
       <!-- REDES SOCIAIS AO FINAL DO SITE -->
-      <section class="socials-section">
+      <section id="redes-sociais" class="socials-section">
         <div class="container">
           <div class="section-header">
             <span class="chip">Conecte-se Conosco</span>
@@ -489,8 +489,8 @@ function renderCultPage() {
                     <div class="social-icon-box">
                       ${
                         rede.tipo === "facebook"
-                          ? facebookIconSvg(22, "#A67C4E")
-                          : instagramIconSvg(22, "#E0272D")
+                          ? facebookIconSvg(20, "#A67C4E")
+                          : instagramIconSvg(20, "#E0272D")
                       }
                     </div>
                     <span class="chip">${rede.destaque}</span>
@@ -509,6 +509,19 @@ function renderCultPage() {
           </div>
         </div>
       </section>
+
+      <!-- BARRA INFERIOR DE NAVEGAÇÃO RÁPIDA NO CELULAR -->
+      <nav class="mobile-quick-bar" aria-label="Atalhos rápidos do culto no celular">
+        <a href="#louvores" class="mobile-quick-link highlight" data-scroll-to="louvores">
+          🎧 Louvores
+        </a>
+        <a href="#como-chegar" class="mobile-quick-link" data-scroll-to="como-chegar">
+          📍 Como Chegar
+        </a>
+        <a href="#redes-sociais" class="mobile-quick-link" data-scroll-to="redes-sociais">
+          📱 Redes
+        </a>
+      </nav>
     </main>
   `;
 }
@@ -517,28 +530,27 @@ function renderFooter() {
   return `
     <footer class="footer">
       <div class="container footer-inner">
-        <div style="display: flex; align-items: center; gap: 0.85rem;">
+        <div class="footer-brand">
           <div class="brand-logo-wrap">
             <img src="./assets/logo-inoti-teens.png" alt="Logo INOTI Teens" class="brand-logo-img" />
           </div>
           <div>
-            <strong style="font-family: var(--font-ui); font-size: 1.05rem;">
+            <strong style="font-family: var(--font-ui); font-size: 1rem;">
               ${cultoData.grupo.nome} · ${cultoData.grupo.igreja}
             </strong>
-            <p style="font-size: 0.82rem; color: var(--madeira);">
+            <p style="font-size: 0.8rem; color: var(--madeira);">
               Salmo 31.15 — “Nas tuas mãos estão os meus dias.”
             </p>
           </div>
         </div>
 
-        <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center;">
+        <div class="footer-actions">
           ${
             state.activeTab !== "cultos"
               ? `
             <button
               type="button"
               class="btn btn-primary"
-              style="padding: 0.6rem 1.2rem; font-size: 0.85rem;"
               data-tab-target="cultos"
             >
               ${heartCrossSvg(16, "#FAF7F2")}
@@ -552,7 +564,6 @@ function renderFooter() {
             target="_blank"
             rel="noopener noreferrer"
             class="btn btn-secondary-light"
-            style="padding: 0.6rem 1.2rem; font-size: 0.85rem;"
           >
             Playlist no Spotify ↗
           </a>
@@ -625,7 +636,12 @@ function attachEvents() {
 
 // Inicialização da rota por hash
 const initialHash = window.location.hash.replace("#", "");
-if (initialHash === "cultos" || initialHash === "como-chegar" || initialHash === "louvores") {
+if (
+  initialHash === "cultos" ||
+  initialHash === "como-chegar" ||
+  initialHash === "louvores" ||
+  initialHash === "redes-sociais"
+) {
   state.activeTab = "cultos";
 } else if (initialHash === "sobre" || initialHash === "eventos" || initialHash === "inicio") {
   state.activeTab = initialHash;
@@ -633,10 +649,11 @@ if (initialHash === "cultos" || initialHash === "como-chegar" || initialHash ===
 
 renderApp();
 
-// Parallax suave na arte da cruz no scroll
+// Parallax suave na arte da cruz no scroll (apenas em telas maiores)
 window.addEventListener(
   "scroll",
   () => {
+    if (window.innerWidth < 920) return;
     const heroSection = document.getElementById("cult-hero-section");
     if (heroSection) {
       const y = Math.min(24, window.scrollY * 0.05);

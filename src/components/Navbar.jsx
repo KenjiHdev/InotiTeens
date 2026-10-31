@@ -4,9 +4,9 @@ import { cultoData } from "../data/cultoData.js";
 export function Navbar({ activeTab, onSelectTab }) {
   const tabs = [
     { id: "inicio", label: "Início" },
-    { id: "cultos", label: "Cultos", badge: "07/11 · Novo" },
-    { id: "sobre", label: "Sobre o INOTI" },
-    { id: "eventos", label: "Agenda & Fotos" },
+    { id: "cultos", label: "Cultos", badge: "07/11" },
+    { id: "sobre", label: "Sobre" },
+    { id: "eventos", label: "Agenda" },
   ];
 
   return (
@@ -20,7 +20,7 @@ export function Navbar({ activeTab, onSelectTab }) {
         >
           <div className="brand-logo-wrap">
             <img
-              src="/assets/logo-inoti-teens.png"
+              src="./assets/logo-inoti-teens.png"
               alt="Logo INOTI Teens"
               className="brand-logo-img"
             />

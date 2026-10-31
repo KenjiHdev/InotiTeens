@@ -286,7 +286,7 @@ export function CultPage() {
       </section>
 
       {/* REDES SOCIAIS AO FINAL DO SITE */}
-      <section className="socials-section">
+      <section id="redes-sociais" className="socials-section">
         <div className="container">
           <div className="section-header">
             <span className="chip">Conecte-se Conosco</span>
@@ -323,6 +323,19 @@ export function CultPage() {
           </div>
         </div>
       </section>
+
+      {/* BARRA INFERIOR DE NAVEGAÇÃO RÁPIDA NO CELULAR */}
+      <nav className="mobile-quick-bar" aria-label="Atalhos rápidos do culto no celular">
+        <a href="#louvores" className="mobile-quick-link highlight">
+          🎧 Louvores
+        </a>
+        <a href="#como-chegar" className="mobile-quick-link">
+          📍 Como Chegar
+        </a>
+        <a href="#redes-sociais" className="mobile-quick-link">
+          📱 Redes
+        </a>
+      </nav>
     </main>
   );
 }

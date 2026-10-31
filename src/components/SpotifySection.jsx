@@ -52,10 +52,10 @@ export function SpotifySection() {
           <div className="spotify-iframe-wrap">
             <iframe
               title="Playlist Oficial do Culto Ao Dono dos Meus Dias no Spotify"
-              style={{ borderRadius: "16px", border: 0 }}
+              style={{ borderRadius: "14px", border: 0, display: "block" }}
               src={cultoData.culto.spotifyEmbedUrl}
               width="100%"
-              height="380"
+              height="352"
               allowFullScreen
               allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
               loading="lazy"

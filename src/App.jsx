@@ -10,7 +10,12 @@ export function App() {
 
   useEffect(() => {
     const hash = window.location.hash.replace("#", "");
-    if (hash === "cultos" || hash === "como-chegar" || hash === "louvores") {
+    if (
+      hash === "cultos" ||
+      hash === "como-chegar" ||
+      hash === "louvores" ||
+      hash === "redes-sociais"
+    ) {
       setActiveTab("cultos");
     } else if (hash === "sobre" || hash === "eventos" || hash === "inicio") {
       setActiveTab(hash);
@@ -45,30 +50,29 @@ export function App() {
       {/* Rodapé global */}
       <footer className="footer">
         <div className="container footer-inner">
-          <div style={{ display: "flex", alignItems: "center", gap: "0.85rem" }}>
+          <div className="footer-brand">
             <div className="brand-logo-wrap">
               <img
-                src="/assets/logo-inoti-teens.png"
+                src="./assets/logo-inoti-teens.png"
                 alt="Logo INOTI Teens"
                 className="brand-logo-img"
               />
             </div>
             <div>
-              <strong style={{ fontFamily: "var(--font-ui)", fontSize: "1.05rem" }}>
+              <strong style={{ fontFamily: "var(--font-ui)", fontSize: "1.02rem" }}>
                 {cultoData.grupo.nome} · {cultoData.grupo.igreja}
               </strong>
-              <p style={{ fontSize: "0.82rem", color: "var(--madeira)" }}>
+              <p style={{ fontSize: "0.8rem", color: "var(--madeira)" }}>
                 Salmo 31.15 — “Nas tuas mãos estão os meus dias.”
               </p>
             </div>
           </div>
 
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", alignItems: "center" }}>
+          <div className="footer-actions">
             {activeTab !== "cultos" && (
               <button
                 type="button"
                 className="btn btn-primary"
-                style={{ padding: "0.6rem 1.2rem", fontSize: "0.85rem" }}
                 onClick={() => handleSelectTab("cultos")}
               >
                 <HeartCrossIcon size={16} color="#FAF7F2" />
@@ -80,7 +84,6 @@ export function App() {
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-secondary-light"
-              style={{ padding: "0.6rem 1.2rem", fontSize: "0.85rem" }}
             >
               Playlist no Spotify ↗
             </a>
