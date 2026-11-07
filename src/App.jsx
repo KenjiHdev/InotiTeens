@@ -12,6 +12,7 @@ export function App() {
     const hash = window.location.hash.replace("#", "");
     if (
       hash === "cultos" ||
+      hash === "mensagem-tema" ||
       hash === "como-chegar" ||
       hash === "louvores" ||
       hash === "redes-sociais"
@@ -62,9 +63,12 @@ export function App() {
               <strong style={{ fontFamily: "var(--font-ui)", fontSize: "1.02rem" }}>
                 {cultoData.grupo.nome} · {cultoData.grupo.igreja}
               </strong>
-              <p style={{ fontSize: "0.8rem", color: "var(--madeira)" }}>
-                Salmo 31.15 — “Nas tuas mãos estão os meus dias.”
+              <p style={{ fontSize: "0.82rem", color: "var(--madeira)", marginTop: "0.15rem" }}>
+                {cultoData.culto.comunidadeMensagem}
               </p>
+              <span style={{ fontSize: "0.75rem", color: "var(--brasa)", fontWeight: 600 }}>
+                {cultoData.culto.seloJapones} · Salmo 31.15
+              </span>
             </div>
           </div>
 

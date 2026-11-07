@@ -2,15 +2,18 @@
 
 Site oficial do grupo **INOTI Teens** (Jovens da **Igreja Evangélica Caminho da Vida**), contendo:
 - **Página Geral ("Início", "Sobre o INOTI", "Agenda & Fotos")**: Apresenta o estado moderno **"Em construção"** do portal geral do ministério, com atalho em destaque para o culto atual.
-- **Aba "Cultos" → Culto Especial "Ao Dono dos Meus Dias" (Salmo 31.15)**:
+- **Aba "Cultos" → Culto Especial "Ao Dono dos Meus Dias" (Salmo 31.15 & Marcos 10:17–26)**:
   - Identidade visual completa seguindo o Design System (*Sagrado + Jovem*, paleta Papel `#FAF7F2`, Ouro Terroso `#A67C4E`, Tinta `#1C1A18`, Noite `#121012`, Brasa `#F2B661`, Vermelho Coração `#E0272D` e Laranja Teens `#D9693A`).
   - Arte oficial da cruz em xilogravura integrada ao layout e logo do **INOTI Teens**.
-  - Mensagens devocionais com o tema **"Ao Dono dos Meus Dias"**.
-  - Contagem regressiva em tempo real até **07/11 às 19h**.
+  - **Seção Mensagens do Tema (Roteiro Marcos 10:17–26 — O Jovem Rico)**:
+    - *O Encontro que Expôs o Coração* (Contexto bíblico de Marcos 10:17–26).
+    - *Os 3 Pilares*: **01. A Religiosidade Não Salva**, **02. Salvador e Senhor**, **03. Viver o Reino de Deus**.
+    - Citações devocionais (*Danila Araújo* e *Isa Drops*) e apelo final de entrega (*“O que falta para você?”*).
+  - Informações essenciais e programação do culto (**07/11 às 19h**).
   - **Integração com Spotify** exibindo a playlist oficial dos louvores (`1NNfmAHJeeVVrRkidoYuXh`).
-  - Programação com timeline vertical (marcadores coração-cruz) e ministração do **Pastor Joel Hayashi**.
+  - Ministração do **Pastor Joel Hayashi** (`@joel_hayashi`).
   - Localização (`Praça Haroldo Daltro, 460`) com mapa integrado e botões para **Google Maps** e **Waze**.
-  - Confirmação de presença rápida + botão de convite pronto para WhatsApp.
+  - **Redes Sociais**: Instagram INOTI Teens, Instagram Oficial da Igreja (Vila Carrão), Facebook da Igreja (Vila Carrão), **Facebook da Igreja de Santo André** e Instagram EBD INOTI.
 
 ---
 

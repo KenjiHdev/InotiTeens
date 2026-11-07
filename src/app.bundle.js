@@ -44,69 +44,10 @@ const spotifyIconSvg = (size = 18, color = "currentColor") => `
   </svg>
 `;
 
-const clockIconSvg = (size = 18, color = "currentColor") => `
-  <svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <circle cx="12" cy="12" r="10"/>
-    <polyline points="12 6 12 12 16 14"/>
-  </svg>
-`;
-
 function getWhatsAppShareLink() {
   const currentUrl = window.location.href.split("#")[0] + "#cultos";
   const message = `Fala galera! Bora pro Culto do INOTI Teens "Ao Dono dos Meus Dias"?\n\n📅 Sábado, 07/11 às 19h\n🎙️ Ministração: Pr. Joel Hayashi\n📍 Local: Praça Haroldo Daltro, 460 (Igreja Evangélica Caminho da Vida - Vila Carrão)\n\nOuça os louvores no Spotify e confira o mapa aqui:\n${currentUrl}`;
   return `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-}
-
-function getRemainingTime() {
-  const targetDate = new Date(cultoData.culto.dataISO).getTime();
-  const now = new Date().getTime();
-  const diff = targetDate - now;
-
-  if (diff <= 0) {
-    return { days: "00", hours: "00", minutes: "00", seconds: "00" };
-  }
-
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-  return {
-    days: String(days).padStart(2, "0"),
-    hours: String(hours).padStart(2, "0"),
-    minutes: String(minutes).padStart(2, "0"),
-    seconds: String(seconds).padStart(2, "0"),
-  };
-}
-
-function renderCountdownHtml() {
-  const time = getRemainingTime();
-  return `
-    <div class="countdown-box" id="cult-countdown" aria-label="Contagem regressiva até o culto">
-      <div class="countdown-header">
-        ${clockIconSvg(15, "#F2B661")}
-        <span>Faltam para o Culto (07/11 às 19h)</span>
-      </div>
-      <div class="countdown-grid">
-        <div class="countdown-tile">
-          <span class="countdown-num" id="cd-days">${time.days}</span>
-          <span class="countdown-label">Dias</span>
-        </div>
-        <div class="countdown-tile">
-          <span class="countdown-num" id="cd-hours">${time.hours}</span>
-          <span class="countdown-label">Horas</span>
-        </div>
-        <div class="countdown-tile">
-          <span class="countdown-num" id="cd-mins">${time.minutes}</span>
-          <span class="countdown-label">Min</span>
-        </div>
-        <div class="countdown-tile">
-          <span class="countdown-num" id="cd-secs">${time.seconds}</span>
-          <span class="countdown-label">Seg</span>
-        </div>
-      </div>
-    </div>
-  `;
 }
 
 const crownOfThornsDividerHtml = () => `
@@ -313,8 +254,6 @@ function renderCultPage() {
               os jovens da <strong>${cultoData.grupo.igreja}</strong>.
             </p>
 
-            ${renderCountdownHtml()}
-
             <div class="hero-info-strip">
               <div class="hero-info-item">
                 <span class="hero-info-label">📅 Quando</span>
@@ -373,32 +312,74 @@ function renderCultPage() {
         </div>
       </section>
 
-      <!-- MENSAGENS COM O TEMA "AO DONO DOS MEUS DIAS" -->
-      <section class="theme-messages-section">
+      <!-- MENSAGENS COM O TEMA "AO DONO DOS MEUS DIAS" (MARCOS 10:17–26) -->
+      <section class="theme-messages-section" id="mensagem-tema">
         <div class="container">
           <div class="section-header">
-            <span class="chip">Mensagens do Tema</span>
+            <span class="chip">${cultoData.mensagemRoteiro.superHeadline}</span>
             <h2 class="section-title">
-              O que significa viver para o <span class="gold">Dono dos nossos dias</span>?
+              Quanto custa entregar o <span class="gold">controle de quem você é</span>?
             </h2>
             <p class="section-subtitle">
-              Três reflexões que preparam o nosso coração para o culto de jovens.
+              “${cultoData.mensagemRoteiro.subheadline}”
             </p>
+            <blockquote class="theme-devotional-quote">
+              “${cultoData.mensagemRoteiro.apoioDevocional.citacao}”
+              <cite>— ${cultoData.mensagemRoteiro.apoioDevocional.autora}</cite>
+            </blockquote>
           </div>
 
+          <!-- O Confronto da Passagem (Marcos 10:17–26) -->
+          <article class="scripture-confront-card">
+            <div class="scripture-confront-top">
+              <span class="chip">${cultoData.mensagemRoteiro.confronto.referencia}</span>
+              <span style="font-family: var(--font-ui); font-weight: 700; font-size: 0.76rem; color: var(--ouro);">
+                Palavra Base da Ministração
+              </span>
+            </div>
+            <h3 class="scripture-confront-title">
+              ${cultoData.mensagemRoteiro.confronto.titulo}
+            </h3>
+            <div class="scripture-confront-body">
+              <p>${cultoData.mensagemRoteiro.confronto.paragrafo1}</p>
+              <p>${cultoData.mensagemRoteiro.confronto.paragrafo2}</p>
+            </div>
+          </article>
+
+          <!-- Os Três Pilares da Mensagem -->
           <div class="messages-grid">
             ${cultoData.mensagensTema
               .map(
                 (msg, idx) => `
               <article class="message-card">
-                <span class="message-number">0${idx + 1}</span>
-                <h3 class="message-title">${msg.titulo}</h3>
-                <div class="message-sub">${msg.subtitulo}</div>
-                <p style="color: var(--sepia); font-size: 0.94rem;">${msg.texto}</p>
+                <div>
+                  <div class="message-card-top">
+                    <span class="message-number">0${idx + 1}</span>
+                    <span class="message-ref-badge">${msg.referencia}</span>
+                  </div>
+                  <h3 class="message-title">${msg.titulo}</h3>
+                  <div class="message-sub">${msg.subtitulo}</div>
+                  <p style="color: var(--sepia); font-size: 0.94rem;">${msg.texto}</p>
+                </div>
+                <div class="message-highlight-quote">
+                  ${msg.destaque}
+                </div>
               </article>
             `
               )
               .join("")}
+          </div>
+
+          <!-- O Clímax / Resposta de Adoração e Entrega -->
+          <div class="theme-climax-card">
+            <blockquote class="theme-climax-quote">
+              “${cultoData.mensagemRoteiro.climax.citacao}”
+              <cite>— ${cultoData.mensagemRoteiro.climax.autora}</cite>
+            </blockquote>
+            <div class="theme-climax-appeal">
+              <h3>${cultoData.mensagemRoteiro.climax.perguntaDestaque}</h3>
+              <p>${cultoData.mensagemRoteiro.climax.apelo}</p>
+            </div>
           </div>
 
           ${crownOfThornsDividerHtml()}
@@ -490,7 +471,7 @@ function renderCultPage() {
               <h3>${cultoData.culto.preletor}</h3>
               <p>${cultoData.culto.preletorBio}</p>
             </div>
-            <div>
+            <div style="display: flex; flex-direction: column; gap: 0.55rem;">
               <a
                 href="${cultoData.culto.preletorInstagram}"
                 target="_blank"
@@ -499,6 +480,15 @@ function renderCultPage() {
               >
                 ${instagramIconSvg(18, "#FAF7F2")}
                 Instagram ${cultoData.culto.preletorInstagramHandle} ↗
+              </a>
+              <a
+                href="${cultoData.culto.preletorIgrejaInstagram}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn btn-secondary"
+              >
+                ${instagramIconSvg(18, "currentColor")}
+                Igreja Triny ${cultoData.culto.preletorIgrejaInstagramHandle} ↗
               </a>
             </div>
           </div>
@@ -596,7 +586,7 @@ function renderCultPage() {
               Nossas <span class="gold">Redes Sociais</span>
             </h2>
             <p class="section-subtitle">
-              Siga os perfis oficiais do INOTI Teens, da Igreja Evangélica Caminho da Vida e da EBD para acompanhar nossos cultos, eventos e estudos.
+              Siga os perfis oficiais do INOTI Teens, das nossas igrejas (Vila Carrão e Santo André) e da EBD para acompanhar nossos cultos, eventos e estudos.
             </p>
           </div>
 
@@ -671,9 +661,12 @@ function renderFooter() {
             <strong style="font-family: var(--font-ui); font-size: 1rem;">
               ${cultoData.grupo.nome} · ${cultoData.grupo.igreja}
             </strong>
-            <p style="font-size: 0.8rem; color: var(--madeira);">
-              Salmo 31.15 — “Nas tuas mãos estão os meus dias.”
+            <p style="font-size: 0.82rem; color: var(--madeira); margin-top: 0.15rem;">
+              ${cultoData.culto.comunidadeMensagem}
             </p>
+            <span style="font-size: 0.75rem; color: var(--brasa); font-weight: 600;">
+              ${cultoData.culto.seloJapones} · Salmo 31.15
+            </span>
           </div>
         </div>
 
@@ -731,27 +724,6 @@ function renderApp() {
   attachEvents();
 }
 
-let countdownInterval = null;
-
-function startCountdown() {
-  if (countdownInterval) {
-    clearInterval(countdownInterval);
-  }
-  countdownInterval = setInterval(() => {
-    const cdDays = document.getElementById("cd-days");
-    const cdHours = document.getElementById("cd-hours");
-    const cdMins = document.getElementById("cd-mins");
-    const cdSecs = document.getElementById("cd-secs");
-    if (!cdDays || !cdHours || !cdMins || !cdSecs) return;
-
-    const time = getRemainingTime();
-    cdDays.textContent = time.days;
-    cdHours.textContent = time.hours;
-    cdMins.textContent = time.minutes;
-    cdSecs.textContent = time.seconds;
-  }, 1000);
-}
-
 function attachEvents() {
   document.querySelectorAll("[data-tab-target]").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -794,14 +766,13 @@ function attachEvents() {
       heroSection.style.setProperty("--beam-y", `${y}%`);
     });
   }
-
-  startCountdown();
 }
 
 // Inicialização da rota por hash
 const initialHash = window.location.hash.replace("#", "");
 if (
   initialHash === "cultos" ||
+  initialHash === "mensagem-tema" ||
   initialHash === "como-chegar" ||
   initialHash === "louvores" ||
   initialHash === "redes-sociais"

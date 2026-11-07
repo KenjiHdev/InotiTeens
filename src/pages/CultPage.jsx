@@ -6,46 +6,14 @@ import {
   WhatsAppIcon,
   SpotifyIcon,
   MapPinIcon,
-  ClockIcon,
   InstagramIcon,
+  FacebookIcon,
 } from "../components/Icons.jsx";
 import { SpotifySection } from "../components/SpotifySection.jsx";
 
 export function CultPage() {
   const [beamPos, setBeamPos] = useState({ x: 50, y: 0 });
   const [parallaxY, setParallaxY] = useState(0);
-  const [timeLeft, setTimeLeft] = useState({
-    days: "00",
-    hours: "00",
-    minutes: "00",
-    seconds: "00",
-  });
-
-  useEffect(() => {
-    const calcTime = () => {
-      const targetDate = new Date(cultoData.culto.dataISO).getTime();
-      const now = new Date().getTime();
-      const diff = targetDate - now;
-      if (diff <= 0) {
-        setTimeLeft({ days: "00", hours: "00", minutes: "00", seconds: "00" });
-        return;
-      }
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-      setTimeLeft({
-        days: String(days).padStart(2, "0"),
-        hours: String(hours).padStart(2, "0"),
-        minutes: String(minutes).padStart(2, "0"),
-        seconds: String(seconds).padStart(2, "0"),
-      });
-    };
-
-    calcTime();
-    const timer = setInterval(calcTime, 1000);
-    return () => clearInterval(timer);
-  }, []);
 
   useEffect(() => {
     const onScroll = () => {
@@ -118,32 +86,6 @@ export function CultPage() {
               <strong>{cultoData.grupo.igreja}</strong>.
             </p>
 
-            {/* Contagem regressiva mobile-first */}
-            <div className="countdown-box" id="cult-countdown" aria-label="Contagem regressiva até o culto">
-              <div className="countdown-header">
-                <ClockIcon size={15} color="#F2B661" />
-                <span>Faltam para o Culto (07/11 às 19h)</span>
-              </div>
-              <div className="countdown-grid">
-                <div className="countdown-tile">
-                  <span className="countdown-num">{timeLeft.days}</span>
-                  <span className="countdown-label">Dias</span>
-                </div>
-                <div className="countdown-tile">
-                  <span className="countdown-num">{timeLeft.hours}</span>
-                  <span className="countdown-label">Horas</span>
-                </div>
-                <div className="countdown-tile">
-                  <span className="countdown-num">{timeLeft.minutes}</span>
-                  <span className="countdown-label">Min</span>
-                </div>
-                <div className="countdown-tile">
-                  <span className="countdown-num">{timeLeft.seconds}</span>
-                  <span className="countdown-label">Seg</span>
-                </div>
-              </div>
-            </div>
-
             {/* Informações essenciais com adaptação 1 coluna abaixo de 440px */}
             <div className="hero-info-strip">
               <div className="hero-info-item">
@@ -214,30 +156,72 @@ export function CultPage() {
         </div>
       </section>
 
-      {/* MENSAGENS COM O TEMA "AO DONO DOS MEUS DIAS" */}
-      <section className="theme-messages-section">
+      {/* MENSAGENS COM O TEMA "AO DONO DOS MEUS DIAS" (MARCOS 10:17–26) */}
+      <section className="theme-messages-section" id="mensagem-tema">
         <div className="container">
           <div className="section-header">
-            <span className="chip">Mensagens do Tema</span>
+            <span className="chip">{cultoData.mensagemRoteiro.superHeadline}</span>
             <h2 className="section-title">
-              O que significa viver para o <span className="gold">Dono dos nossos dias</span>?
+              Quanto custa entregar o <span className="gold">controle de quem você é</span>?
             </h2>
             <p className="section-subtitle">
-              Três verdades que vão guiar nossa noite de adoração e Palavra.
+              “{cultoData.mensagemRoteiro.subheadline}”
             </p>
+            <blockquote className="theme-devotional-quote">
+              “{cultoData.mensagemRoteiro.apoioDevocional.citacao}”
+              <cite>— {cultoData.mensagemRoteiro.apoioDevocional.autora}</cite>
+            </blockquote>
           </div>
 
+          {/* O Confronto da Passagem (Marcos 10:17–26) */}
+          <article className="scripture-confront-card">
+            <div className="scripture-confront-top">
+              <span className="chip">{cultoData.mensagemRoteiro.confronto.referencia}</span>
+              <span style={{ fontFamily: "var(--font-ui)", fontWeight: 700, fontSize: "0.76rem", color: "var(--ouro)" }}>
+                Palavra Base da Ministração
+              </span>
+            </div>
+            <h3 className="scripture-confront-title">
+              {cultoData.mensagemRoteiro.confronto.titulo}
+            </h3>
+            <div className="scripture-confront-body">
+              <p>{cultoData.mensagemRoteiro.confronto.paragrafo1}</p>
+              <p>{cultoData.mensagemRoteiro.confronto.paragrafo2}</p>
+            </div>
+          </article>
+
+          {/* Os Três Pilares da Mensagem */}
           <div className="messages-grid">
             {cultoData.mensagensTema.map((msg, idx) => (
               <article key={msg.titulo} className="message-card">
-                <span className="message-number">0{idx + 1}</span>
-                <h3 className="message-title">{msg.titulo}</h3>
-                <div className="message-sub">{msg.subtitulo}</div>
-                <p style={{ color: "var(--sepia)", fontSize: "0.96rem" }}>
-                  {msg.texto}
-                </p>
+                <div>
+                  <div className="message-card-top">
+                    <span className="message-number">0{idx + 1}</span>
+                    <span className="message-ref-badge">{msg.referencia}</span>
+                  </div>
+                  <h3 className="message-title">{msg.titulo}</h3>
+                  <div className="message-sub">{msg.subtitulo}</div>
+                  <p style={{ color: "var(--sepia)", fontSize: "0.94rem" }}>
+                    {msg.texto}
+                  </p>
+                </div>
+                <div className="message-highlight-quote">
+                  {msg.destaque}
+                </div>
               </article>
             ))}
+          </div>
+
+          {/* O Clímax / Resposta de Adoração e Entrega */}
+          <div className="theme-climax-card">
+            <blockquote className="theme-climax-quote">
+              “{cultoData.mensagemRoteiro.climax.citacao}”
+              <cite>— {cultoData.mensagemRoteiro.climax.autora}</cite>
+            </blockquote>
+            <div className="theme-climax-appeal">
+              <h3>{cultoData.mensagemRoteiro.climax.perguntaDestaque}</h3>
+              <p>{cultoData.mensagemRoteiro.climax.apelo}</p>
+            </div>
           </div>
 
           <CrownOfThornsDivider />
@@ -259,7 +243,7 @@ export function CultPage() {
               <h3>{cultoData.culto.preletor}</h3>
               <p>{cultoData.culto.preletorBio}</p>
             </div>
-            <div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.55rem" }}>
               <a
                 href={cultoData.culto.preletorInstagram}
                 target="_blank"
@@ -267,6 +251,14 @@ export function CultPage() {
                 className="btn btn-primary"
               >
                 Instagram {cultoData.culto.preletorInstagramHandle} ↗
+              </a>
+              <a
+                href={cultoData.culto.preletorIgrejaInstagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-secondary"
+              >
+                Igreja Triny {cultoData.culto.preletorIgrejaInstagramHandle} ↗
               </a>
             </div>
           </div>
@@ -378,7 +370,7 @@ export function CultPage() {
               Nossas <span className="gold">Redes Sociais</span>
             </h2>
             <p className="section-subtitle">
-              Siga os perfis oficiais do INOTI Teens, da Igreja Evangélica Caminho da Vida e da EBD para acompanhar tudo de perto.
+              Siga os perfis oficiais do INOTI Teens, das nossas igrejas (Vila Carrão e Santo André) e da EBD para acompanhar nossos cultos, eventos e estudos.
             </p>
           </div>
 
@@ -393,6 +385,13 @@ export function CultPage() {
               >
                 <div>
                   <div className="social-card-top">
+                    <div className="social-icon-box">
+                      {rede.tipo === "facebook" ? (
+                        <FacebookIcon size={20} color="#A67C4E" />
+                      ) : (
+                        <InstagramIcon size={20} color="#E0272D" />
+                      )}
+                    </div>
                     <span className="chip">{rede.destaque}</span>
                   </div>
                   <h3 className="social-title">{rede.nome}</h3>

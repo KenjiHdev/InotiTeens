@@ -69,8 +69,6 @@ def run_inspection():
          re.search(r'\.btn\s*\{[^}]*min-height:\s*48px', css) is not None),
         ("Botão especial WhatsApp (.btn-whatsapp)",
          ".btn-whatsapp" in css),
-        ("Contagem regressiva estilizada (.countdown-box, .countdown-tile)",
-         ".countdown-box" in css and ".countdown-tile" in css),
         ("Info strip fluida (1 coluna no mobile estreito, 2 colunas a 440px)",
          re.search(r'\.hero-info-strip\s*\{[^}]*grid-template-columns:\s*1fr;', css) is not None and "440px" in css),
         ("Barra rápida mobile fixa com 4 colunas (.mobile-quick-bar)",
@@ -94,12 +92,10 @@ def run_inspection():
         js = f.read()
 
     js_checks = [
-        ("Ícones SVG dedicados para mobile (WhatsApp, MapPin, Spotify, Clock)",
-         "whatsappIconSvg" in js and "mapPinIconSvg" in js and "spotifyIconSvg" in js and "clockIconSvg" in js),
+        ("Ícones SVG dedicados para mobile (WhatsApp, MapPin, Spotify)",
+         "whatsappIconSvg" in js and "mapPinIconSvg" in js and "spotifyIconSvg" in js),
         ("Link direto para convite e compartilhamento no WhatsApp",
          "api.whatsapp.com/send?text=" in js),
-        ("Contagem regressiva dinâmica em tempo real (renderCountdownHtml & startCountdown)",
-         "renderCountdownHtml" in js and "startCountdown" in js and "cd-days" in js),
         ("Barra inferior rápida na página do Culto (4 atalhos com ícones)",
          'class="mobile-quick-bar"' in js and 'data-scroll-to="louvores"' in js and 'data-scroll-to="como-chegar"' in js and 'data-scroll-to="redes-sociais"' in js),
         ("Barra inferior rápida na página Em Construção (atalho Culto 07/11, Louvores, Local, WhatsApp)",
@@ -115,6 +111,27 @@ def run_inspection():
     for label, passed in js_checks:
         print(f"[{'OK' if passed else 'FAIL'}] {label}")
         results.append((label, passed, "OK" if passed else "Falha no JS"))
+
+    # 4b. Inspect Culto Data (src/data/cultoData.js)
+    print("\n--- 3b. Inspeção de Dados do Roteiro e Redes Sociais (src/data/cultoData.js) ---")
+    data_path = os.path.join(workspace, "src", "data", "cultoData.js")
+    with open(data_path, "r", encoding="utf-8") as f:
+        data_js = f.read()
+
+    data_checks = [
+        ("Roteiro Marcos 10:17–26 presente em cultoData.js",
+         "Marcos 10:17–26" in data_js and "O Encontro que Expôs o Coração" in data_js),
+        ("Três pilares da mensagem ('A Religiosidade Não Salva', 'Salvador e Senhor', 'Viver o Reino de Deus')",
+         "A Religiosidade Não Salva" in data_js and "Salvador e Senhor" in data_js and "Viver o Reino de Deus" in data_js),
+        ("Citações devocionais (Danila Araújo e Isa Drops)",
+         "Danila Araújo" in data_js and "Isa Drops" in data_js),
+        ("Facebook da Igreja de Santo André adicionado (https://www.facebook.com/share/19hcRX7YfF/)",
+         "https://www.facebook.com/share/19hcRX7YfF/" in data_js and "Santo André" in data_js),
+    ]
+
+    for label, passed in data_checks:
+        print(f"[{'OK' if passed else 'FAIL'}] {label}")
+        results.append((label, passed, "OK" if passed else "Falha em cultoData.js"))
 
     # 5. Test Assets HTTP 200
     print("\n--- 4. Inspeção de Requisições de Recursos (Assets & Scripts) ---")
